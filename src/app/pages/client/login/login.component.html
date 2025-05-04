@@ -1,0 +1,115 @@
+<div
+  class="flex justify-content-center pt-2 max-h-screen max-w-screen overflow-hidden mt-5"
+>
+  <div class="grid justify-content-center lg:p-0" style="min-width: 80%">
+    <div
+      class="col-12 xl:col-6"
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 10%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="h-full w-full m-0 py-7 px-4 mb-3"
+        style="
+          border-radius: 53px;
+          background: linear-gradient(
+            180deg,
+            var(--surface-50) 38.9%,
+            var(--surface-0)
+          );
+        "
+      >
+        <div class="text-center">
+          <h2 style="font-size: 24px !important; color: var(--primary-color)">
+            Đăng nhập
+          </h2>
+          <img
+            src="assets/images/logo.png"
+            alt="Image"
+            height="60"
+            class="mb-3"
+          />
+        </div>
+
+        <form
+          class="w-full md:w-10 mx-auto"
+          (ngSubmit)="login()"
+          [formGroup]="loginForm"
+        >
+          <label for="email" class="block text-900 text-xl font-medium mb-2"
+            >Email</label
+          >
+          <input
+            id="email"
+            type="text"
+            formControlName="username"
+            placeholder="Nhập email"
+            pInputText
+            class="w-full"
+            style="padding: 1rem"
+          />
+          <div
+            *ngIf="submitted && (loginForm.controls['username'].errors?.['required'] || loginForm.controls['username'].errors?.['whitespace']
+            )"
+            class="invalid-feedback mt-2 ps-1"
+          >
+            <div style="color: red">Email không được trống!</div>
+          </div>
+          <label
+            for="password"
+            class="block text-900 font-medium text-xl mb-2 mt-3"
+            >Mật khẩu</label
+          >
+          <p-password
+            id="password"
+            placeholder="Nhập mật khẩu"
+            formControlName="password"
+            styleClass="w-full"
+            [toggleMask]="true"
+            [feedback]="false"
+          ></p-password>
+          <div
+            *ngIf="submitted  && (loginForm.controls['password'].errors?.['required'] || loginForm.controls['password'].errors?.['whitespace']
+            )"
+            class="invalid-feedback mt-2"
+          >
+            <div style="color: red">Mật khẩu không được trống!</div>
+          </div>
+          <div *ngIf="error" class="invalid-feedback mt-1 p-2">
+            <div style="color: red">{{ error }}</div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-between mb-1 mt-3"
+          >
+            <a
+              class="font-medium no-underline ml-2 cursor-pointer"
+              style="color: var(--primary-color); font-style: italic"
+              routerLink="/send-otp"
+              >Quên mật khẩu?</a
+            >
+          </div>
+
+          <div class="flex justify-content-center loginBtn">
+            <p-button label="Đăng nhập" type="submit"></p-button>
+          </div>
+        </form>
+
+        <div class="flex align-items-center justify-content-center mt-5">
+          Bạn chưa có tài khoản?
+          <a
+            [routerLink]="['/register']"
+            class="font-medium no-underline ml-2 text-right cursor-pointer"
+            style="color: var(--primary-color); font-style: italic"
+            >Đăng ký</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

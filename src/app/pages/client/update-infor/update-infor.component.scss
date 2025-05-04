@@ -1,0 +1,26 @@
+* {
+    font-size: 16px !important;
+}
+
+
+::ng-deep .p-button {
+    cursor: pointer;
+
+    .p-button-label {
+        font-weight: 100 !important;
+    }
+}
+
+::ng-deep .p-inputtext {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+::ng-deep .p-password input {
+    padding: 1rem;
+    font-size: 1rem;
+}
+.update-infor-title {
+    font-size: 24px !important;
+    color: var(--primary-color);
+}

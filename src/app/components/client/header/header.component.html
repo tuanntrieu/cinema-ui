@@ -1,0 +1,95 @@
+<div class="grid" id="header">
+  <div
+    class="col-12 md:col-3 pl-7 flex flex-column md:flex-row align-items-center justify-content-around"
+  >
+    <a routerLink="/"
+      ><p-image src="assets/images/logo.png" alt="Image" width="80"
+    /></a>
+    <ng-select
+      [items]="cinemas"
+      bindLabel="name"
+      bindValue="id"
+      groupBy="province"
+      [(ngModel)]="selectedId"
+      placeholder="Chọn rạp chiếu"
+      (change)="onCinemaIdChanged($event)"
+      [clearable]="false"
+    >
+    </ng-select>
+  </div>
+
+  <div class="col-12 md:col-7 flex justify-content-around">
+    <p-menubar [model]="items" />
+  </div>
+
+  <div
+    class="col-12 md:col-2 flex justify-content-around align-items-center"
+    *ngIf="!user"
+  >
+    <p-button
+      label="Đăng nhập"
+      [text]="true"
+      [raised]="true"
+      severity="primary"
+      class="small-btn"
+      routerLink="/login"
+    />
+    <p-button
+      label="Đăng ký"
+      [text]="true"
+      [raised]="true"
+      severity="primary"
+      class="small-btn"
+      routerLink="/register"
+    />
+  </div>
+  <div class="col-12 md:col-2 flex align-items-center p-4" *ngIf="user">
+    <p-tieredMenu #menu [model]="menuItems" [popup]="true"></p-tieredMenu>
+    <div
+      (click)="menu.toggle($event)"
+      class="flex align-items-center cursor-pointer welcome"
+    >
+      <i class="pi pi-user mr-2"></i>
+      <span class="font-bold name"
+        >Xin chào, <i>{{ user.fullName }}</i></span
+      >
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ height: '180px', width: '600px' }"
+  header="Chọn rạp"
+  [baseZIndex]="1000"
+  [contentStyle]="{ overflow: 'visible' }"
+  (onHide)="onDialogClose()"
+>
+  <div class="flex justify-content-around">
+    <div>
+      <p>Tỉnh/ thành phố</p>
+      <ng-select
+        [items]="provinces"
+        [(ngModel)]="proSelected"
+        placeholder="Chọn tỉnh/thành phố"
+        (change)="onProvinceSelect($event)"
+        [clearable]="false"
+      >
+      </ng-select>
+    </div>
+    <div>
+      <p>Tên rạp</p>
+      <ng-select
+        [items]="cinemasByPro"
+        [(ngModel)]="selectedId"
+        bindLabel="name"
+        bindValue="id"
+        placeholder="Chọn tên rạp"
+        (change)="onCinemaSelectd($event)"
+        [clearable]="false"
+      >
+      </ng-select>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,163 @@
+<div
+  class="surface-0 flex justify-content-center pt-2 mt-5 max-h-screen max-w-screen overflow-hidden"
+>
+  <div class="grid justify-content-center lg:p-0" style="min-width: 80%">
+    <div
+      class="col-12 xl:col-6"
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 10%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="w-full m-0 py-7"
+        style="
+          border-radius: 53px;
+          background: linear-gradient(
+            180deg,
+            var(--surface-50) 38.9%,
+            var(--surface-0)
+          );
+        "
+      >
+        <div class="text-center mb-5">
+          <h2
+            style="font-size: 24px !important; color: var(--primary-color)"
+            class="mb-1 p-0"
+          >
+            Đăng ký
+          </h2>
+          <img
+            src="assets/images/logo.png"
+            alt="Image"
+            height="60"
+            class="mb-1"
+          />
+        </div>
+
+        <form
+          class="w-full md:w-10 mx-auto mt-2"
+          (ngSubmit)="register()"
+          [formGroup]="regForm"
+        >
+          <label for="email" class="block mb-2">Email</label>
+          <input
+            id="email"
+            type="text"
+            formControlName="email"
+            placeholder="Nhập email"
+            pInputText
+            class="w-full"
+            style="padding: 1rem"
+            (input)="onInput()"
+          />
+          <div
+            *ngIf="submitted  && (regForm.controls['email'].errors?.['required'] || regForm.controls['email'].errors?.['whitespace']
+          )"
+            class="invalid-feedback mt-2"
+            style="color: red"
+          >
+            Email không được trống!
+          </div>
+          <div
+            *ngIf="
+              ( regForm.controls['email'].touched) && regForm.controls['email'].errors?.['invalidEmail']
+            "
+            class="invalid-feedback mt-2"
+            style="color: red"
+          >
+            Email không hợp lệ!
+          </div>
+          <label for="password" class="block mb-2 mt-3">Mật khẩu</label>
+          <p-password
+            id="password"
+            placeholder="Nhập mật khẩu"
+            formControlName="password"
+            styleClass="w-full"
+            [toggleMask]="true"
+            (input)="onInput()"
+          ></p-password>
+          <div
+            *ngIf="submitted  && (regForm.controls['password'].errors?.['invalidPassword'])"
+            class="invalid-feedback mt-2"
+            style="color: red"
+          >
+            Mật khẩu không hợp lệ, mật khẩu tối thiểu 6 kí tự gồm chữ và số !
+          </div>
+
+          <label for="confirmPassword" class="block mb-2 mt-3"
+            >Nhập lại mật khẩu</label
+          >
+          <p-password
+            id="confirmPassword"
+            placeholder="Nhập lại mật khẩu"
+            formControlName="confirmPassword"
+            styleClass="w-full"
+            [toggleMask]="true"
+            [feedback]="false"
+            (input)="onInput()"
+          ></p-password>
+          <div
+            *ngIf="submitted  && (regForm.controls['confirmPassword'].errors?.['required'] || regForm.controls['confirmPassword'].errors?.['whitespace']
+        )"
+            class="invalid-feedback mt-2"
+            style="color: red"
+          >
+            Vui lòng nhập lại mật khẩu!
+          </div>
+          <div
+            *ngIf="
+              (regForm.controls['confirmPassword'].touched) &&
+              regForm.errors?.['passwordNotMatch']
+            "
+            class="invalid-feedback mt-2"
+            style="color: red"
+          >
+            Mật khẩu không khớp
+          </div>
+
+          <label for="email" class="block font-medium mb-2 mt-3">Tên </label>
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            placeholder="Nhập tên "
+            pInputText
+            class="w-full"
+            style="padding: 1rem"
+            (input)="onInput()"
+          />
+          <div
+            *ngIf="submitted && (regForm.controls['fullName'].errors?.['required'] || regForm.controls['fullName'].errors?.['whitespace']
+          )"
+            class="invalid-feedback mt-2 ps-1"
+          >
+            <div style="color: red">Tên không được trống!</div>
+          </div>
+          <div *ngIf="error" class="invalid-feedback mt-1 p-2">
+            <div style="color: red">{{ error }}</div>
+          </div>
+
+          <div class="flex justify-content-center mt-3">
+            <p-button label="Đăng ký" type="submit"></p-button>
+          </div>
+        </form>
+
+        <div class="flex align-items-center justify-content-center mt-5 mb-2">
+          Bạn đã có tài khoản?
+          <a
+            [routerLink]="['/login']"
+            class="font-medium no-underline ml-2 text-right cursor-pointer"
+            style="color: var(--primary-color); font-style: italic"
+            >Đăng nhập</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

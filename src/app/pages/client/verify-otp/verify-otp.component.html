@@ -1,0 +1,88 @@
+<div
+  class="surface-0 flex justify-content-center pt-2 mt-5 max-h-screen max-w-screen overflow-hidden"
+>
+  <div class="grid justify-content-center lg:p-0" style="min-width: 80%">
+    <div
+      class="col-12 xl:col-6"
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 10%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="w-full m-0 py-7"
+        style="
+          border-radius: 53px;
+          background: linear-gradient(
+            180deg,
+            var(--surface-50) 38.9%,
+            var(--surface-0)
+          );
+        "
+      >
+        <div class="text-center mb-5">
+          <h2 class="forget-password-title">
+            <i class="pi pi-user mr-2"></i>Quên mật khẩu
+          </h2>
+          <img
+            src="assets/images/logo.png"
+            alt="Image"
+            height="60"
+            class="mb-1"
+          />
+        </div>
+        <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+          <div class="flex justify-content-center gap-2">
+            <input
+              *ngFor="let ctrl of otpControls; let i = index"
+              type="text"
+              maxlength="1"
+              inputmode="numeric"
+              class="otp-input"
+              [formControlName]="'digit' + i"
+              (input)="onInput($event, i)"
+              (keyup)="handleKey($event, i)"
+              (focus)="preventSkipFocus($event, i)"
+            />
+          </div>
+          <div *ngIf="error" class="invalid-feedback mt-1 p-2">
+            <div style="color: red">{{ error }}</div>
+          </div>
+          <div
+            class="flex flex-column justify-content-center mt-3 gap-3 align-items-center"
+          >
+            <span *ngIf="countdown > 0">
+              Gửi lại mã sau {{ countdown | date : "mm:ss" : "UTC" }}
+            </span>
+
+            <button
+              pButton
+              label="Gửi lại mã"
+              (click)="resendOtp()"
+              [disabled]="countdown > 0"
+              styleClass="p-button-text"
+              style="
+                color: var(--primary-color);
+                background: none;
+                border: none;
+                box-shadow: none;
+              "
+            ></button>
+          </div>
+          <div class="flex justify-content-center mt-4">
+            <p-button
+              label="Xác nhận"
+              type="submit"
+              styleClass="p-button-primary"
+            ></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

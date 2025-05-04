@@ -1,0 +1,11 @@
+:host ::ng-deep .p-button-danger {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  :host ::ng-deep .p-button-danger:hover {
+    background-color: #d32f2f;
+  }
+  
