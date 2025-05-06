@@ -29,8 +29,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   items: MenuItem[] = [
-    { label: 'LỊCH CHIẾU THEO RẠP' },
-    { label: 'PHIM' }
+    { label: 'LỊCH CHIẾU THEO RẠP', routerLink: '/showtimes' },
+    { label: 'PHIM', routerLink: '/movies' }
   ];
   visible = false;
   selectedId: number | undefined;
@@ -103,11 +103,11 @@ export class HeaderComponent implements OnInit {
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
       this.saveCineme(cinema.id);
+      location.reload();
     } else {
       this.selectedId = undefined;
     }
   }
-
   onProvinceSelect(province: string) {
     this.#cinema.getCinemaByProvince(province).subscribe({
       next: (res) => {
@@ -123,6 +123,7 @@ export class HeaderComponent implements OnInit {
     if (cinema) {
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
+      location.reload();
       this.saveCineme(cinema.id);
       this.visible = false;
     } else {

@@ -12,7 +12,7 @@ import { ToastService } from '../toast/toast.service';
 })
 export class CustomerService {
   #http = inject(HttpClient);
-  #url = `${baseUrl}customer`;
+  #url = `${baseUrl}/customer`;
   #toast = inject(ToastService);
   private currentUserSubject = new BehaviorSubject<Customer | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();

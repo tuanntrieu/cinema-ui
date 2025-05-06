@@ -1,0 +1,25 @@
+<div class="container">
+  <p-tabMenu
+    [model]="menuItems"
+    [activeItem]="activeItem"
+    (activeItemChange)="onActiveItemChange($event)"
+  ></p-tabMenu>
+
+  <div class="movie-content mt-4">
+    <div class="movie-grid">
+      <app-moive-card
+        *ngFor="let movie of movieList"
+        [movie]="movie"
+      ></app-moive-card>
+    </div>
+
+    <p-paginator
+      *ngIf="movieList.length != 0"
+      [rows]="pagination.rows"
+      [totalRecords]="pagination.pageCount"
+      [first]="pagination.first"
+      (onPageChange)="onPageChange($event)"
+      [rowsPerPageOptions]="[4, 8]"
+    ></p-paginator>
+  </div>
+</div>

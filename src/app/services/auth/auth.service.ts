@@ -13,7 +13,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   constructor(public jwtHelper: JwtHelperService) { }
   readonly #http = inject(HttpClient);
-  #url = `${baseUrl}auth/`;
+  #url = `${baseUrl}/auth/`;
 
   key = 'auth';
 

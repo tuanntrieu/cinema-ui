@@ -1,0 +1,107 @@
+.product-item {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  width: 240px;
+  padding-bottom: 20px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .pi-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 380px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .badge.fancy-badge {
+      font-size: 14px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      background-color: rgba(252, 207, 220, 0.5);
+      color: #b03060;
+      font-weight: 600;
+      border: 2px dashed rgba(240, 160, 190, 0.7);
+      box-shadow: 0 2px 6px rgba(248, 190, 211, 0.2);
+      display: inline-block;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+
+  .film-info {
+    padding: 14px;
+    flex-grow: 1;
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #007ad9;
+      margin: 10px 0;
+      text-align: center;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+
+      li {
+        font-size: 14px;
+        color: #444;
+        line-height: 1.4;
+        margin-bottom: 8px;
+
+        .bold {
+          font-weight: 600;
+          color: #111;
+        }
+
+        .color1 {
+          color: #007ad9;
+        }
+      }
+    }
+  }
+
+  .text-center {
+    padding-bottom: 20px;
+
+    .btn-mua-ve {
+      background-color: #f2d4dc;
+      color: #a5485a;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 24px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    
+      i {
+        margin-right: 6px;
+      }
+    
+      &:hover {
+        background-color: #e8c2cd;
+        cursor: pointer;
+        animation: lightning-flash 0.4s ease-in-out;
+      }
+    }
+    
+  }
+}

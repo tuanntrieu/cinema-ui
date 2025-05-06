@@ -11,6 +11,22 @@ export const ClientRoute: Route[] = [
             ),
         children: [
             {
+                path: '',
+                loadChildren: () =>
+                    import('./home/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Cinemas',
+            },
+            {
+                path: 'movies',
+                loadChildren: () =>
+                    import('./home/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Cinemas',
+            },
+            {
                 path: 'login',
                 loadChildren: () =>
                     import('./login/feature.routes').then(
@@ -69,6 +85,14 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Quên mật khẩu',
+            },
+            {
+                path: 'showtimes',
+                loadChildren: () =>
+                    import('./home/showtimes/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Lịch chiếu theo rạp',
             }
         ],
         title: 'Trang chủ',

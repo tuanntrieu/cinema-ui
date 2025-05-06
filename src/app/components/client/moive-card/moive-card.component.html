@@ -1,0 +1,35 @@
+<div class="product-item no-padding">
+  <div class="pi-img-wrapper">
+    <img class="img-responsive border-radius-20" alt="" [src]="movie.image" />
+    <span style="position: absolute; top: 10px; left: 10px">
+      <span class="badge fancy-badge">{{ movie.ageLimit }} </span>
+    </span>
+  </div>
+
+  <div class="film-info film-xs-info">
+    <h3
+      class="text-center bold margin-top-5"
+      style="max-height: 30px; min-height: 30px; cursor: pointer;"
+    >
+      <a>{{ movie.name }}</a>
+    </h3>
+    <ul class="list-unstyled font-lg">
+      <li style="max-height: 50px">
+        <span class="bold">Thể loại:</span> {{ movie.type }}
+      </li>
+      <li><span class="bold">Thời lượng:</span> {{ movie.duration }} phút</li>
+      <li *ngIf="movie.releaseDate">
+        <span class="bold">Ngày khởi chiếu: </span>
+        <span class="font-family-oswa color1">{{
+          movie.releaseDate | date : "dd/MM/yyyy"
+        }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="text-center" >
+    <a class="btn btn-2 btn-mua-ve">
+      <span><i class="fa fa-ticket"></i></span>MUA VÉ
+    </a>
+  </div>
+</div>

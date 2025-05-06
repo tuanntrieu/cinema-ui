@@ -18,6 +18,8 @@ app-header {
     z-index: 1000;
 }
 
-router-outlet {
-    flex: 1;
-}
+.main-content {
+    flex: 1;              // Quan trọng: chiếm phần còn lại
+    display: flex;
+    flex-direction: column;
+  }

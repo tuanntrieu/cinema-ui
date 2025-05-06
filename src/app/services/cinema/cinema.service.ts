@@ -9,7 +9,7 @@ import { mapError } from '../../utils/exception';
 })
 export class CinemaService {
   #http = inject(HttpClient);
-  #url = `${baseUrl}cinema/`;
+  #url = `${baseUrl}/cinema/`;
 
   getAllCinema(): Observable<any> {
     return this.#http.get(`${this.#url}load-all-cinema`).pipe(
