@@ -89,7 +89,7 @@ export const ClientRoute: Route[] = [
             {
                 path: 'showtimes',
                 loadChildren: () =>
-                    import('./home/showtimes/feature.routes').then(
+                    import('./showtimes/feature.routes').then(
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Lịch chiếu theo rạp',

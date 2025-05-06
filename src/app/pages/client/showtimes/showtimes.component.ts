@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { MovieService } from '../../../../services/moive/movie.service';
-import { ToastService } from '../../../../services/toast/toast.service';
+import { MovieService } from '../../../services/moive/movie.service';
+import { ToastService } from '../../../services/toast/toast.service';
 import { CommonModule } from '@angular/common';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { MovieSearchRequest } from '../../../../models/movie';
-import { success } from '../../../../utils/constants';
+import { MovieSearchRequest } from '../../../models/movie';
+import { success } from '../../../utils/constants';
 import { PaginatorModule } from 'primeng/paginator';
-import { MoiveCardComponent } from '../../../../components/client/moive-card/moive-card.component';
+import { MoiveCardComponent } from '../../../components/client/moive-card/moive-card.component';
 
 @Component({
   selector: 'app-showtimes',
