@@ -1,0 +1,83 @@
+<p-tabMenu
+  *ngIf="isShowTab"
+  [model]="menuItems"
+  [activeItem]="activeItem"
+  (activeItemChange)="onActiveItemChange($event)"
+></p-tabMenu>
+
+<div class="schedule-section" *ngFor="let room of scheduleDay">
+  <h5 class="room-name">{{ room.name }}</h5>
+  <div class="time-list d-flex flex-wrap gap-2">
+    <div
+      *ngFor="let time of room.times"
+      class="time-box text-center"
+      (click)="onBuyTicket(time)"
+    >
+      <div class="time-label">⏰ {{ convertTimeString(time.time) }}</div>
+      <div class="seat-available">{{ time.countSeatAvailable }} ghế trống</div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  header="Header"
+  [(visible)]="visible"
+  [modal]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [style]="{ width: '70vw' }"
+  [contentStyle]="{ overflow: 'visible', padding: '1.5rem' }"
+  [dismissableMask]="false"
+>
+  <ng-template pTemplate="header">
+    <div
+      class="inline-flex align-items-center justify-content-center gap-2"
+      style="font-weight: 600; font-size: 20px; color: #007ad9"
+    >
+      BẠN ĐANG ĐẶT VÉ XEM PHIM
+    </div>
+  </ng-template>
+
+  <hr />
+  <h2 class="text-center">{{ movieName }}</h2>
+  <hr />
+
+  <div class="text-center">
+    <table class="table table-striped table-hover w-100">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 30%">
+            <h4>Rạp</h4>
+          </th>
+          <th class="text-center" style="width: 30%">
+            <h4>Ngày chiếu</h4>
+          </th>
+          <th class="text-center" style="width: 30%">
+            <h4>Giờ chiếu</h4>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center font-lg bold">
+            <h3>
+              <span class="bold">{{ cinemaName }}</span>
+            </h3>
+          </td>
+          <td class="text-center font-lg bold">
+            <h3>
+              <span class="bold">{{ date | date : "dd-MM-yyyy" }}</span>
+            </h3>
+          </td>
+          <td class="text-center font-lg bold">
+            <h3>
+              <span class="bold">{{ convertTimeString(time) }}</span>
+            </h3>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn-confirm" [routerLink]="['/place-order', schedulePicked]">
+      Xác nhận
+    </button>
+  </div>
+</p-dialog>

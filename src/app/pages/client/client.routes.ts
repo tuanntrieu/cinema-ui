@@ -93,6 +93,23 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Lịch chiếu theo rạp',
+            },
+            {
+                path: 'movie/:id',
+                loadChildren: () =>
+                    import('./movie-detail/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Chi tiết phim',
+            },
+            {
+                path: 'place-order/:id',
+                loadChildren: () =>
+                    import('./place-order/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Đặt vé',
+                canActivate: [AuthGuard]
             }
         ],
         title: 'Trang chủ',

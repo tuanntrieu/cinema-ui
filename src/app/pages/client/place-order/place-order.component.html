@@ -1,0 +1,211 @@
+<div class="place-order-wrapper mx-auto" *ngIf="roomOrder">
+  <p-breadcrumb
+    [model]="breadcrumbItems"
+    [home]="homeItem"
+    class="mb-3 text-sm"
+  ></p-breadcrumb>
+
+  <div class="grid mt-2">
+    <div class="seat-layout col-12 md:col-8">
+      <div class="movie-warning">
+        Theo quy định của cục điện ảnh, phim này không dành cho khán giả dưới
+        {{ roomOrder.ageLimit }}
+        tuổi.
+      </div>
+
+      <div class="seat-legend">
+        <div class="seat-item">
+          <img
+            src="assets/images/seats/STANDARD_AVAILABLE.png"
+            class="note-seat"
+          />
+          Ghế trống
+        </div>
+        <div class="seat-item">
+          <img
+            src="assets/images/seats/STANDARD_SELECTED.png"
+            class="note-seat"
+          />
+          Ghế đang chọn
+        </div>
+        <div class="seat-item">
+          <img
+            src="assets/images/seats/STANDARD_HOLDING.png"
+            class="note-seat"
+          />
+          Ghế được giữ
+        </div>
+        <div class="seat-item">
+          <img src="assets/images/seats/STANDARD_SOLD.png" class="note-seat" />
+          Ghế đã bán
+        </div>
+      </div>
+
+      <div class="">
+        <div class="screen">
+          <img src="assets/images/seats/screen.png" class="screen-image" />
+        </div>
+        <hr style="border-top: 2px solid #5c5959; width: 100%; margin: 0" />
+        <div class="seats">
+          <div *ngFor="let row of seatGrid" class="seat-row">
+            <div *ngFor="let seat of row" class="seat-cell">
+              <ng-container
+                *ngIf="
+                  seat && seat.seatStatus !== 'MAINTENANCE';
+                  else emptySeat
+                "
+              >
+                <div
+                  class="seat flex flex-column"
+                  [ngClass]="getSeatClass(seat)"
+                  [title]="seat?.seatName"
+                  (click)="onSeatClick(seat)"
+                >
+                  <img [src]="getUrlImage(seat)" class="note-seat" />
+                  {{ seat?.seatName || "" }}
+                </div>
+              </ng-container>
+              <ng-template #emptySeat>
+                <div class="seat empty-seat"></div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="seat-info-bar">
+        <!-- Ghế thường -->
+        <div class="seat-type-detail">
+          <div class="seat-type">
+            <img
+              src="assets/images/seats/STANDARD_AVAILABLE.png"
+              alt="Ghế thường"
+              class="note-seat"
+            />
+            <span>Ghế thường</span>
+          </div>
+          <div class="seat-price-detail">
+            {{standardNote}}
+          </div>
+        </div>
+
+        <!-- Ghế VIP -->
+        <div class="seat-type-detail">
+          <div class="seat-type">
+            <img src="assets/images/seats/VIP_AVAILABLE.png" alt="Ghế VIP" />
+            <span>Ghế VIP</span>
+          </div>
+          <div class="seat-price-detail">
+            {{vipNote}}
+          </div>
+        </div>
+
+        <div class="seat-type-detail">
+          <div class="seat-type">
+            <img src="assets/images/seats/COUPLE_AVAILABLE.png" alt="Ghế đôi" />
+            <span>Ghế đôi</span>
+          </div>
+          <div class="seat-price-detail">
+            {{coupleNote}}
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Tổng tiền -->
+        <div class="price-info">
+          <span>Tổng tiền</span>
+          <strong class="total-price">{{ totalPrice | number }} vnđ</strong>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Thời gian -->
+        <div class="timer">
+          <span>Thời gian còn lại</span>
+          <strong class="countdown">{{ countdownTime }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="movie-info col-12 md:col-4">
+      <div class="grid align-items-start">
+        <div class="col-12">
+          <div class="flex gap-3 mb-3">
+            <div class="col-5">
+              <img
+                [src]="roomOrder.movieImageUrl"
+                alt="Movie Poster"
+                class="poster shadow-2"
+              />
+            </div>
+            <div class="col-7 flex flex-column justify-content-center">
+              <h5 class="m-0 font-bold" style="font-size: 22px; color: #007ad9">
+                {{ roomOrder.movieName }}
+              </h5>
+              <p style="color: #615e5e">{{ roomOrder.language }}</p>
+            </div>
+          </div>
+        </div>
+        <hr style="border-top: 2px dashed #ccc; width: 100%" />
+        <div class="col-12">
+          <table class="w-full movie-detail">
+            <tbody>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-tag mr-2"></i>Thể loại:
+                </td>
+                <td class="font-bold">{{ roomOrder.movieType }}</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-clock mr-2"></i>Thời lượng:
+                </td>
+                <td class="font-bold">{{ roomOrder.duration }} phút</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-building mr-2"></i>Rạp chiếu:
+                </td>
+                <td class="font-bold">{{ roomOrder.cinemaName }}</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-calendar mr-2"></i>Ngày chiếu:
+                </td>
+                <td class="font-bold">
+                  {{ roomOrder.date | date : "dd-MM-yyyy" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-clock mr-2"></i>Giờ chiếu:
+                </td>
+                <td class="font-bold">
+                  {{ convertTimeString(roomOrder.time.toString()) }}
+                </td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-video mr-2"></i>Phòng chiếu:
+                </td>
+                <td class="font-bold">{{ roomOrder.roomName }}</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-3">
+                  <i class="pi pi-server mr-2"></i>Ghế ngồi:
+                </td>
+                <td>
+                  {{ nameSelected.join(', ') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="text-center">
+            <button class="btn-order">Xác nhận</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

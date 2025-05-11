@@ -10,6 +10,8 @@
       <app-moive-card
         *ngFor="let movie of movieList"
         [movie]="movie"
+        [isComing]="isComing"
+        (buyTicket)="handleBuyTicket($event)"
       ></app-moive-card>
     </div>
 
@@ -23,3 +25,28 @@
     ></p-paginator>
   </div>
 </div>
+
+<p-dialog
+  header="Header"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+>
+  <ng-template pTemplate="header">
+    <div
+      class="inline-flex align-items-center justify-content-center gap-2 p-2"
+      style="font-weight: 600; font-size: 20px; color: #007ad9"
+    >
+      LỊCH CHIẾU- {{ movieName.toUpperCase() }}
+    </div>
+  </ng-template>
+  <hr />
+  <h2 class="text-center">{{ cinemaName }}</h2>
+  <hr />
+  <app-schedule-card
+    [schedule]="schedule"
+    [movieName]="movieName"
+    *ngIf="schedule.length > 0"
+  />
+</p-dialog>

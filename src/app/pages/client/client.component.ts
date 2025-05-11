@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent } from '../../components/client/header/header.component';
 import { FooterComponent } from "../../components/client/footer/footer.component";
+import { CustomerService } from '../../services/customer/customer.service';
 
 @Component({
   selector: 'app-client',
@@ -12,5 +13,5 @@ import { FooterComponent } from "../../components/client/footer/footer.component
   styleUrl: './client.component.scss'
 })
 export class ClientComponent {
-
+  
 }

@@ -41,6 +41,9 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
             else {
               localStorage.removeItem('access_token');
               localStorage.removeItem('refresh_token');
+              authService.logout().subscribe({
+              
+              });
               router.navigate(['/login']).then(
                 () => window.location.reload()
               );

@@ -70,7 +70,7 @@ export class VerifyOtpComponent implements OnInit {
           localStorage.removeItem('otpStartTime');
         }
       }, 1000);
-    }
+    } 
   }
 
   resendOtp() {

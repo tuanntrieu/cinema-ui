@@ -46,3 +46,7 @@ app-moive-card {
   flex: 0 1 calc(25% - 16px); 
   box-sizing: border-box;
 }
+
+::ng-deep .p-dialog  {
+  padding: 2.5rem !important;
+}

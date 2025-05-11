@@ -13,7 +13,6 @@ import { jwtDecode } from 'jwt-decode';
 import { CustomerService } from '../../../services/customer/customer.service';
 import { Customer } from '../../../models/customer';
 import { MenuModule } from 'primeng/menu';
-// header.component.ts
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -46,7 +45,19 @@ export class HeaderComponent implements OnInit {
   user: Customer | null = null;
 
   ngOnInit() {
-
+    const username = this.#customer.getCurrentUser();
+    if (username) {
+      this.#customer.getCustomerInfor(username).subscribe(
+        {
+          next: (customerRes) => {
+            this.#customer.setCurrentUser(customerRes.data);
+          },
+          error: (err) => {
+            this.#toast.error(err);
+          }
+        }
+      )
+    }
     this.#customer.currentUser$.subscribe(user => {
       this.user = user;
       if (this.user) {
@@ -60,7 +71,6 @@ export class HeaderComponent implements OnInit {
       } else {
         this.loadSelectedCinema();
       }
-
     });
     this.loadCinemas();
     this.loadProvinces();
@@ -71,6 +81,13 @@ export class HeaderComponent implements OnInit {
     this.#cinema.getAllCinema().subscribe({
       next: (res) => {
         this.cinemas = res.data;
+        if (this.selectedId) {
+          const name = this.cinemas.find((cinema) => {
+            cinema.id === this.selectedId;
+          })?.name;
+          if (name)
+            localStorage.setItem("cinemaName", name)
+        }
       },
       error: (err) => {
         this.#toast.error('Lỗi', err.toString());
@@ -102,6 +119,7 @@ export class HeaderComponent implements OnInit {
     if (cinema) {
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
+      localStorage.setItem("cinemaName", cinema.name);
       this.saveCineme(cinema.id);
       location.reload();
     } else {
@@ -123,6 +141,7 @@ export class HeaderComponent implements OnInit {
     if (cinema) {
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
+      localStorage.setItem("cinemaName", cinema.name);
       location.reload();
       this.saveCineme(cinema.id);
       this.visible = false;
@@ -133,7 +152,11 @@ export class HeaderComponent implements OnInit {
 
   onDialogClose() {
     if (!this.selectedId && this.cinemas.length > 0) {
+
+      localStorage.setItem("selectedId", this.cinemas[0].id.toString())
+      localStorage.setItem("cinemaName", this.cinemas[0].name);
       this.selectedId = this.cinemas[0].id;
+      location.reload();
     }
   }
   menuItems: MenuItem[] = [];

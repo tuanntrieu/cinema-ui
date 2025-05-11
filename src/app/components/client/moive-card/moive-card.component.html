@@ -1,17 +1,16 @@
 <div class="product-item no-padding">
   <div class="pi-img-wrapper">
     <img class="img-responsive border-radius-20" alt="" [src]="movie.image" />
-    <span style="position: absolute; top: 10px; left: 10px">
-      <span class="badge fancy-badge">{{ movie.ageLimit }} </span>
+    <span class="play-trailer-overlay" (click)="openTrailerDialog(movie.trailer, $event) " *ngIf="movie.trailer">
+      <span class="play-trailer-text">Xem Trailer</span>
     </span>
   </div>
 
   <div class="film-info film-xs-info">
-    <h3
-      class="text-center bold margin-top-5"
-      style="max-height: 30px; min-height: 30px; cursor: pointer;"
-    >
-      <a>{{ movie.name }}</a>
+    <h3 class="text-center bold margin-top-5 movie-title">
+      <a [routerLink]="['/movie', movie.id]" class="movie-link">
+        {{ movie.name }}
+      </a>
     </h3>
     <ul class="list-unstyled font-lg">
       <li style="max-height: 50px">
@@ -27,9 +26,31 @@
     </ul>
   </div>
 
-  <div class="text-center" >
-    <a class="btn btn-2 btn-mua-ve">
+  <div class="text-center" *ngIf="!isComing">
+    <a class="btn btn-2 btn-mua-ve" (click)="onBuyTicketClick()">
       <span><i class="fa fa-ticket"></i></span>MUA VÉ
     </a>
   </div>
 </div>
+
+
+  <p-dialog
+  header="Trailer"
+  [(visible)]="trailerDialogVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '60vw' }"
+  [contentStyle]="{ overflow: 'hidden' }"
+  [styleClass]="'custom-dialog'"
+>
+  <iframe
+    *ngIf="safeTrailerUrl"
+    width="100%"
+    height="400"
+    [src]="safeTrailerUrl"
+    frameborder="0"
+    allowfullscreen
+  ></iframe>
+</p-dialog>
+
+

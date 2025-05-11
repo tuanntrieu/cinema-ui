@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { ChangePassRequest, CommonResponse, ForgetPassRequest, LoginRequest, RegisterRequest, SendOtpRequest, TokenRefRequest, VerifyOtpRequest } from '../../models/auth';
@@ -94,6 +94,6 @@ export class AuthService {
       })
     );
   }
-
+  
 }
 

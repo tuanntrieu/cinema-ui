@@ -34,7 +34,19 @@ export class MovieService {
       })
     );
   }
-  createMovie(request: MovieRequest, file: File) {
+
+  getMovieDetail(id: number): Observable<any> {
+    return this.#http.get(`${this.#url}/${id}`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  createMovie(request: MovieRequest, file: File): Observable<any> {
     const formData = new FormData();
     Object.entries(request).forEach(([key, value]) => {
       if (Array.isArray(value)) {

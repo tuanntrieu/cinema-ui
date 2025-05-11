@@ -6,6 +6,7 @@ import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
 import { jwtDecode } from 'jwt-decode';
 import { ToastService } from '../toast/toast.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,9 @@ import { ToastService } from '../toast/toast.service';
 export class CustomerService {
   #http = inject(HttpClient);
   #url = `${baseUrl}/customer`;
-  #toast = inject(ToastService);
   private currentUserSubject = new BehaviorSubject<Customer | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
-    this.loadUserFromToken();
-  }
 
   updateCustomer(rq: CustomerRequest): Observable<any> {
     return this.#http.patch<any>(`${this.#url}/update`, rq).pipe(
@@ -73,19 +70,9 @@ export class CustomerService {
     if (user)
       this.currentUserSubject.next(user);
   }
-
-  private loadUserFromToken() {
-    const username = this.extractUsername();
-    if (username) {
-      this.getCustomerInfor(username).subscribe({
-        next: (res) => {
-          this.setCurrentUser(res.data);
-        },
-        error: (err) => {
-          this.#toast.error(err)
-          this.setCurrentUser(null);
-        }
-      });
-    }
+  getCurrentUser(): string | null {
+    return this.extractUsername();
   }
+
+ 
 }

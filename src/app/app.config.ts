@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(ToastModule),
     { provide: MessageService, useClass: MessageService },
     DatePipe,
-    JwtHelperService, 
+    JwtHelperService,
     {
       provide: JWT_OPTIONS,
       useValue: JWT_OPTIONS

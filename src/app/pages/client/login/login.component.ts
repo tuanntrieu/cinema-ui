@@ -36,6 +36,7 @@ export class LoginComponent {
       username: ['', [Validators.required, noWhiteSpace()]],
       password: ['', [Validators.required, noWhiteSpace()]]
     });
+   
   }
 
   login() {
@@ -43,7 +44,6 @@ export class LoginComponent {
     if (!this.loginForm.valid) {
       return;
     }
-
     this.#auth.login(this.loginForm.value as LoginRequest).subscribe({
       next: res => {
         if (res.status === success) {
