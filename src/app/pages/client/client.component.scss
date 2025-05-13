@@ -2,7 +2,7 @@
 *::before,
 *::after {
     box-sizing: border-box;
-  
+
 }
 
 :host {
@@ -20,7 +20,8 @@ app-header {
 }
 
 .main-content {
-    flex: 1;              // Quan trọng: chiếm phần còn lại
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-  }
+}
+

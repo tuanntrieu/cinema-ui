@@ -1,0 +1,14 @@
+<div class="result-container" *ngIf="result">
+  <h2 [ngClass]="result.paymentStatus ? 'success' : 'error'">
+    {{ result.paymentStatus ? 'Giao dịch thành công' : 'Giao dịch thất bại' }}
+  </h2>
+  <p>Vui lòng check Email để xem thông tin vé!</p>
+
+  <button
+    pButton
+    type="button"
+    (click)="navigate()"
+    [label]="result.paymentStatus ? 'Lịch sử đặt vé' : 'Quay về trang chủ'"
+    class="p-button-rounded p-button-outlined mt-4"
+  ></button>
+</div>

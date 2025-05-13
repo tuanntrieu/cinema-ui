@@ -12,7 +12,6 @@
         {{ roomOrder.ageLimit }}
         tuổi.
       </div>
-
       <div class="seat-legend">
         <div class="seat-item">
           <img
@@ -72,6 +71,7 @@
           </div>
         </div>
       </div>
+
       <div class="seat-info-bar">
         <!-- Ghế thường -->
         <div class="seat-type-detail">
@@ -84,7 +84,7 @@
             <span>Ghế thường</span>
           </div>
           <div class="seat-price-detail">
-            {{standardNote}}
+            {{ standardNote }}
           </div>
         </div>
 
@@ -95,7 +95,7 @@
             <span>Ghế VIP</span>
           </div>
           <div class="seat-price-detail">
-            {{vipNote}}
+            {{ vipNote }}
           </div>
         </div>
 
@@ -105,7 +105,7 @@
             <span>Ghế đôi</span>
           </div>
           <div class="seat-price-detail">
-            {{coupleNote}}
+            {{ coupleNote }}
           </div>
         </div>
 
@@ -123,6 +123,60 @@
         <div class="timer">
           <span>Thời gian còn lại</span>
           <strong class="countdown">{{ countdownTime }}</strong>
+        </div>
+      </div>
+
+      <hr style="border-top: 2px dashed #ccc; width: 100%" />
+      <div class="combo">
+        <div class="combo-title">
+          <img
+            style="width: 30px; margin-right: 10px"
+            src="assets/images/ic-combo.png"
+          /><span>COMBO ƯU ĐÃI</span>
+        </div>
+        <div class="combo-list">
+          <p-table [value]="comboResponse" class="w-full text-center">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Hình ảnh</th>
+                <th>Tên</th>
+                <th>Chi tiết</th>
+                <th>Số lượng</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+              <tr>
+                <td>
+                  <img
+                    [src]="product.image"
+                    alt="combo image"
+                    class="w-16 h-auto mx-auto"
+                  />
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td class="combo-ip">
+                  <p-inputNumber
+                    [min]="0"
+                    [showButtons]="true"
+                    buttonLayout="horizontal"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    inputStyleClass="text-center p-0"
+                    class="combo-input"
+                    (onInput)="onQuantityChange($event,product)"
+                  ></p-inputNumber>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+          <p-paginator
+            [rows]="pagination.rows"
+            [totalRecords]="pagination.pageCount"
+            [first]="pagination.first"
+            (onPageChange)="onPageChange($event)"
+          ></p-paginator>
         </div>
       </div>
     </div>
@@ -195,14 +249,14 @@
                   <i class="pi pi-server mr-2"></i>Ghế ngồi:
                 </td>
                 <td>
-                  {{ nameSelected.join(', ') }}
+                  {{ nameSelected.join(", ") }}
                 </td>
               </tr>
             </tbody>
           </table>
 
           <div class="text-center">
-            <button class="btn-order">Xác nhận</button>
+            <button class="btn-order" (click)="onValidate()">Tiếp tục</button>
           </div>
         </div>
       </div>

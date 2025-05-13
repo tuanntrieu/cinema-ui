@@ -35,5 +35,4 @@ export class MoiveCardComponent {
     this.trailerDialogVisible = true;
   }
 
-
 }

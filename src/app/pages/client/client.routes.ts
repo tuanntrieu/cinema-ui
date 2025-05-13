@@ -110,6 +110,25 @@ export const ClientRoute: Route[] = [
                     ),
                 title: 'Đặt vé',
                 canActivate: [AuthGuard]
+            },
+            {
+                path: 'payment/result',
+                loadChildren: () =>
+                    import('./payment/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Kết quả',
+                canActivate: [AuthGuard]
+            }
+            ,
+            {
+                path: 'order-history',
+                loadChildren: () =>
+                    import('./order-history/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Lịch sử thanh toán',
+                canActivate: [AuthGuard]
             }
         ],
         title: 'Trang chủ',

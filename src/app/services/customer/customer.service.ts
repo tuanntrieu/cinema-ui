@@ -5,8 +5,7 @@ import { Customer, CustomerRequest } from '../../models/customer';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
 import { jwtDecode } from 'jwt-decode';
-import { ToastService } from '../toast/toast.service';
-import { AuthService } from '../auth/auth.service';
+
 
 @Injectable({
   providedIn: 'root'

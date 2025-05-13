@@ -1,0 +1,179 @@
+<div class="order-history">
+  <div class="card">
+    Ngày đặt vé:
+    <p-calendar
+      [(ngModel)]="date"
+      dateFormat="dd/mm/yy"
+      [showIcon]="true"
+      class="calendar-small"
+      (ngModelChange)="onChange(date)"
+    />
+    <i
+      class="pi pi-times pl-2"
+      style="cursor: pointer; color: #007bff"
+      (click)="clearDate()"
+    ></i>
+  </div>
+
+  <p-table [value]="tickets" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr class="p-grid p-nogutter">
+        <th class="p-col">Mã Vé</th>
+        <th class="p-col">Ngày đặt vé</th>
+        <th class="p-col">Phim</th>
+        <th class="p-col">Rạp</th>
+        <th class="p-col">Phòng</th>
+        <th class="p-col">Ngày chiếu</th>
+        <th class="p-col">Giờ chiếu</th>
+        <th class="p-col">Ghế</th>
+        <th class="p-col">Tổng tiền ghế</th>
+        <th class="p-col">Tổng tiền combo</th>
+        <th class="p-col"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-ticket>
+      <tr class="p-grid p-nogutter">
+        <td class="p-col">{{ ticket.id }}</td>
+        <td class="p-col">
+          {{ ticket.createdDate | date : "HH:mm:ss dd/MM/yyyy " }}
+        </td>
+        <td class="p-col">{{ ticket.movieName }}</td>
+        <td class="p-col">{{ ticket.cinemaName }}</td>
+        <td class="p-col">{{ ticket.roomName }}</td>
+        <td class="p-col">{{ ticket.date | date : "dd/MM/yyyy" }}</td>
+        <td class="p-col">{{ ticket.time }}</td>
+        <td class="p-col">{{ ticket.seats }}</td>
+        <td class="p-col">
+          {{ ticket.totalSeats | currency : "VND" }}
+        </td>
+
+        <td class="p-col">
+          {{ ticket.totalCombos | currency : "VND" }}
+        </td>
+        <td>
+          <i
+            class="pi pi-eye"
+            style="cursor: pointer"
+            (click)="onViewDetail(ticket.id)"
+          ></i>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    [rows]="pagination.rows"
+    [totalRecords]="pagination.pageCount"
+    [first]="pagination.first"
+    (onPageChange)="onPageChange($event)"
+  ></p-paginator>
+</div>
+<p-dialog
+  header="Chi tiết vé"
+  [(visible)]="visible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '50vw', height: '90vh' }"
+  [contentStyle]="{ 'max-height': '90vh', overflow: 'auto' }"
+  [styleClass]="'custom-dialog'"
+>
+  <div style="text-align: center; margin-bottom: 20px">
+    <button
+      pButton
+      type="button"
+      label="In PDF"
+      icon="pi pi-print"
+      (click)="printPDF()"
+      style="cursor: pointer"
+    ></button>
+  </div>
+  <div class="container" id="ticketContent" *ngIf="ticketDetail">
+    <h2>{{ ticketDetail.movieName }}</h2>
+    <div class="cinema">{{ ticketDetail.cinemaName }}</div>
+    <p style="text-align: center">{{ ticketDetail.cinemaAddress }}</p>
+
+    <div class="divider"></div>
+
+    <h3>MÃ VÉ (RESERVATION CODE)</h3>
+    <div class="ticket-code">{{ ticketDetail.id }}</div>
+
+    <div class="divider"></div>
+
+    <h3>SUẤT CHIẾU (SESSION)</h3>
+    <div class="date-time">
+      <span>{{ ticketDetail.time }}</span>
+      <span>{{ ticketDetail.date }}</span>
+    </div>
+
+    <p
+      style="
+        text-align: center;
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 6px;
+      "
+    >
+      Quý khách vui lòng tới quầy dịch vụ xuất trình mã vé này để được nhận
+      vé.<br />
+      <i
+        >Please go to the service counter and present your booking code to
+        receive the physical ticket to check-in.</i
+      >
+    </p>
+
+    <div class="section">
+      <table>
+        <tr>
+          <th>Phòng chiếu (Hall):</th>
+          <td class="right">{{ ticketDetail.roomName }}</td>
+        </tr>
+        <tr>
+          <th>Ghế (Seat):</th>
+          <td class="right">{{ ticketDetail.seats }}</td>
+        </tr>
+        <tr>
+          <th>Thời gian thanh toán (Payment time):</th>
+          <td class="formatted-datetime">
+            {{ ticketDetail.createdDate | date : "HH:mm dd/MM/yyyy " }}
+          </td>
+        </tr>
+        <tr>
+          <th>Tiền combo bắp nước (Concession amount):</th>
+          <td class="formatted-amount">
+            {{ ticketDetail.totalCombos | currency : "VND" }}
+          </td>
+        </tr>
+        <tr>
+          <th>Tiền vé (Ticket amount):</th>
+          <td class="formatted-amount">
+            {{ ticketDetail.totalSeats | currency : "VND" }}
+          </td>
+        </tr>
+        <tr>
+          <th>Tổng tiền (Amount):</th>
+          <td class="formatted-amount">
+            {{
+              ticketDetail.totalSeats + ticketDetail.totalCombos
+                | currency : "VND"
+            }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>Lưu ý / Note:</b>
+      Vé đã mua không thể huỷ, đổi hoặc trả lại. Vui lòng liên hệ Ban Quản Lý
+      rạp hoặc tra cứu thông tin tại mục Điều khoản mua và sử dụng vé xem phim
+      để biết thêm chi tiết. Cảm ơn bạn đã lựa chọn mua vé qua Ứng dụng Ví điện
+      tử VNPAY. Chúc bạn xem phim vui vẻ!<br />
+      <i>
+        The successful movie ticket cannot be canceled, exchanged or refunded.
+        If you have any question or problems with this order, you can contact
+        Theater Manager or see our Condition to purchase and use movie tickets
+        for more information. Thanks for choosing Ứng dụng Ví điện tử VNPAY and
+        Enjoy the movie!
+      </i>
+    </div>
+  </div>
+</p-dialog>

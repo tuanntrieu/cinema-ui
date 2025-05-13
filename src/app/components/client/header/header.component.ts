@@ -175,6 +175,7 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Lịch sử đặt vé',
         icon: 'pi pi-calendar',
+        routerLink: '/order-history'
 
       },
       {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { RoomService } from '../../../services/room/room.service';
 import { ToastService } from '../../../services/toast/toast.service';
 import { RoomOrderResponse } from '../../../models/room';
@@ -11,42 +11,123 @@ import { SeatStatus, success } from '../../../utils/constants';
 import { SeatResponse } from '../../../models/seat';
 import { SeatService } from '../../../services/seat/seat.service';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
-
+import { ComboOrderRequest, ComboRequest, ComboResponse, ComboSearchRequest } from '../../../models/combo';
+import { ComboService } from '../../../services/combo/combo.service';
+import { PaginatorModule } from 'primeng/paginator';
+import { PaginationStateService } from '../../../services/pagination/pagination-state.service';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormsModule } from '@angular/forms';
+import { TicketService } from '../../../services/ticket/ticket.service';
+import { CinemaService } from '../../../services/cinema/cinema.service';
+import { CustomerService } from '../../../services/customer/customer.service';
+import { Customer } from '../../../models/customer';
+import { DataCacheRequest } from '../../../models/ticket';
 
 @Component({
   selector: 'app-place-order',
   standalone: true,
-  imports: [BreadcrumbModule, CommonModule, TableModule],
+  imports: [BreadcrumbModule, CommonModule, TableModule, PaginatorModule, InputNumberModule, FormsModule],
   templateUrl: './place-order.component.html',
   styleUrls: ['./place-order.component.scss']
 })
-export class PlaceOrderComponent {
+export class PlaceOrderComponent implements OnDestroy {
   readonly #toast = inject(ToastService);
   readonly #room = inject(RoomService);
-  readonly #seat = inject(SeatService)
+  readonly #seat = inject(SeatService);
   readonly #websocket = inject(WebsocketService);
-  readonly #route = inject(Router);
+  readonly #router = inject(Router);
+  readonly #combo = inject(ComboService);
+  readonly stateKey = "place-order";
+  readonly #paginationState = inject(PaginationStateService);
+  readonly #ticket = inject(TicketService);
+  readonly #customer = inject(CustomerService);
+
+  pagination: PageEvent = { first: 0, rows: 3, page: 0, pageCount: 0 };
   roomOrder!: RoomOrderResponse;
   seatGrid: (RoomOrderResponse['seats'][0] | null)[][] = [];
+
   homeItem: MenuItem = { label: 'Trang chủ', routerLink: ['/'] };
   breadcrumbItems: MenuItem[] = [];
+
   scheduleId = 0;
   countdownTime: string = '10:00';
   private countdownInterval: any;
   private remainingSeconds = 600;
 
+  totalPrice: number = 0;
+  nameSelected: string[] = [];
+  seat: SeatResponse[] = [];
+  seatId: number[] = [];
+  comboResponse: ComboResponse[] = [];
 
-
+  standardNote = '';
+  vipNote = '';
+  coupleNote = '';
+  user!: Customer;
+  email = '';
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.scheduleId = +this.route.snapshot.paramMap.get('id')!;
     this.buidRoomOrder();
-    this.#websocket.subscribeToSeatExpired(this.scheduleId, (seatId) => {
-      this.buidRoomOrder();
-    });
+    this.#websocket.subscribeToSeatExpired(this.scheduleId, () => this.buidRoomOrder());
     this.startCountdown();
+    const paginationState = this.#paginationState.getPaginationState(this.stateKey);
+    this.pagination.page = paginationState.page;
+    this.pagination.rows = paginationState.rows;
+    this.getCombo();
+    const username = this.#customer.getCurrentUser();
+    if (username) {
+      this.email = username;
+      this.#customer.currentUser$.subscribe(user => {
+        if (user) {
+          this.user = user;
+        }
+      })
+    }
   }
+
+  getCombo() {
+    const request: ComboSearchRequest = {
+      pageNo: this.pagination.page,
+      pageSize: this.pagination.rows,
+      sortBy: 'name',
+      isAscending: false,
+      name: '',
+    };
+    this.#combo.getCombo(request).subscribe(
+      {
+        next: (res) => {
+          if (res.status === success) {
+            this.comboResponse = res.data.items;
+            this.pagination.page = res.data.pageNo;
+            this.pagination.rows = res.data.pageSize;
+            this.pagination.pageCount = res.data.totalElements;
+            this.pagination.first = this.pagination.page * this.pagination.rows;
+          }
+          else {
+            this.#toast.error(res.message)
+          }
+        }, error: (err) => {
+          this.#toast.error(err)
+        }
+      }
+    );
+  }
+  onPageChange(event: any) {
+    this.pagination.page = event.page;
+    this.pagination.rows = event.rows;
+    this.#paginationState.setPaginationState(this.stateKey, {
+      page: this.pagination.page,
+      rows: this.pagination.rows
+    });
+    this.getCombo();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.countdownInterval);
+  }
+
   buidRoomOrder() {
     this.#room.getRoomOrder(this.scheduleId).subscribe({
       next: (res) => {
@@ -57,20 +138,28 @@ export class PlaceOrderComponent {
             { label: this.roomOrder.movieName }
           ];
           this.buildSeatGrid();
+          this.roomOrder.seats.forEach(seat => {
+            if (seat.seatStatus === SeatStatus.SELECTED) {
+              if (!this.seatId.includes(seat.seatId)) {
+                this.seatId.push(seat.seatId);
+              }
+              if (!this.seat.some(s => s.seatId === seat.seatId)) {
+                this.seat.push(seat);
+              }
+              if (!this.nameSelected.includes(seat.seatName)) {
+                this.nameSelected.push(seat.seatName);
+              }
+            }
+          });
+          this.updateNotesAndTotal();
+        } else {
+          this.#toast.error(res.message);
         }
-        else {
-          this.#toast.error(res.message)
-        }
-      }, error: (err) => {
-        this.#toast.error(err)
+      },
+      error: (err) => {
+        this.#toast.error(err);
       }
     });
-
-  }
-  getUrlImage(seat: any): string {
-    const seatType = seat?.seatType || 'default';
-    const seatStatus = seat?.seatStatus || 'available';
-    return `assets/images/seats/${seatType}_${seatStatus}.png`;
   }
 
   buildSeatGrid() {
@@ -83,10 +172,18 @@ export class PlaceOrderComponent {
       this.seatGrid[seat.xcoordinate - 1][seat.ycoordinate - 1] = seat;
     }
   }
+
+  getUrlImage(seat: any): string {
+    const seatType = seat?.seatType || 'default';
+    const seatStatus = seat?.seatStatus || 'available';
+    return `assets/images/seats/${seatType}_${seatStatus}.png`;
+  }
+
   convertTimeString(timeStr: string): string {
     const [hours, minutes] = timeStr.split(':');
     return `${hours}:${minutes}`;
   }
+
   getSeatClass(seat: RoomOrderResponse['seats'][0] | null): string {
     if (!seat) return '';
     switch (seat.seatStatus) {
@@ -98,28 +195,26 @@ export class PlaceOrderComponent {
     }
   }
 
-  totalPrice: number = 0;
-  nameSelected: string[] = [];
-  seat: SeatResponse[] = [];
-  standardNote = '';
-  vipNote = '';
-  coupleNote = '';
   onSeatClick(seat: SeatResponse) {
     const index = this.seat.findIndex(s => s.seatId === seat.seatId);
-
     if (seat.seatStatus === SeatStatus.AVAILABLE) {
       this.holdSeat(seat.seatId);
-      if (index === -1) {
+      if (index === -1) { // Ghế chưa được chọn
         this.seat.push(seat);
+        this.seatId.push(seat.seatId);
         this.nameSelected.push(seat.seatName);
       }
     } else if (seat.seatStatus === SeatStatus.SELECTED) {
       this.unholdSeat(seat.seatId);
       if (index !== -1) {
         this.seat.splice(index, 1);
+        this.seatId.splice(index, 1);
         this.nameSelected.splice(index, 1);
       }
     }
+    this.updateNotesAndTotal();
+  }
+  updateNotesAndTotal() {
     const typeMap: Record<string, { count: number; total: number }> = {
       STANDARD: { count: 0, total: 0 },
       VIP: { count: 0, total: 0 },
@@ -145,6 +240,7 @@ export class PlaceOrderComponent {
       : '';
 
     this.totalPrice = this.seat.reduce((sum, s) => sum + s.price, 0);
+
   }
 
   holdSeat(seatId: number) {
@@ -173,27 +269,99 @@ export class PlaceOrderComponent {
       }
     });
   }
-  startCountdown() {
-    this.updateCountdownDisplay();
-    this.countdownInterval = setInterval(() => {
-      this.remainingSeconds--;
-      this.updateCountdownDisplay();
 
-      if (this.remainingSeconds <= 0) {
+  startCountdown() {
+    this.countdownInterval = setInterval(() => {
+      if (this.remainingSeconds > 0) {
+        this.remainingSeconds--;
+        const minutes = Math.floor(this.remainingSeconds / 60).toString().padStart(2, '0');
+        const seconds = (this.remainingSeconds % 60).toString().padStart(2, '0');
+        this.countdownTime = `${minutes}:${seconds}`;
+      } else {
         clearInterval(this.countdownInterval);
-        this.#route.navigate(['/']);
+        this.#toast.error('Hết thời gian giữ ghế');
+        this.#router.navigate(['/']);
       }
     }, 1000);
   }
 
-  updateCountdownDisplay() {
-    const minutes = Math.floor(this.remainingSeconds / 60);
-    const seconds = this.remainingSeconds % 60;
-    this.countdownTime = `${this.pad(minutes)}:${this.pad(seconds)}`;
+  onValidate() {
+    if (this.seatId.length === 0) {
+      this.#toast.error("Vui lòng chọn ghế")
+    }
+    else if (this.seatId.length > 8) {
+      this.#toast.error("Bạn chỉ được chọn tối đa 8 ghế")
+    }
+    else {
+      this.#seat.validateSeat(this.scheduleId, this.seatId).subscribe({
+        next: (res) => {
+          if (res.status === success) {
+            if (res.data.data) {
+              this.#ticket.getPaymentUrl(this.totalPrice).subscribe(
+                (resIn) => {
+                  if (resIn.status === success) {
+                    const params = new URLSearchParams(resIn.data.url.split('?')[1]);
+                    const vnpTxnRef = params.get('vnp_TxnRef');
+                    const request: DataCacheRequest = {
+                      vnp_TxnRef: vnpTxnRef ?? '',
+                      customerId: this.user.id,
+                      customerName: this.user.fullName,
+                      customerEmail: this.email,
+                      movieId: this.roomOrder.movieId,
+                      scheduleId: this.scheduleId,
+                      seatId: this.seatId,
+                      combos: this.comboRq
+                    }
+                    this.#ticket.saveDataTmp(request).subscribe(
+                      (resSave) => {
+                        if (resSave.status === success) {
+                          window.location.href = resIn.data.url.toString();
+                        }
+                      }
+                    );
+                  } else {
+                    this.#toast.error(resIn.message);
+                  }
+                }
+              );
+            } else {
+              this.#toast.error(res.data.message);
+            }
+          }
+          else {
+            this.#toast.error(res.message)
+          }
+        }, error: (err) => {
+          this.#toast.error(err)
+        }
+      })
+    }
+  }
+  comboRq: ComboOrderRequest[] = [];
+
+
+
+  onQuantityChange(event: any, product: ComboResponse) {
+    const existingCombo = this.comboRq.find(combo => combo.comboId === product.id);
+    if (existingCombo) {
+      const oldQuantity = existingCombo.quantity;
+      existingCombo.quantity = event.value;
+      this.totalPrice += (event.value - oldQuantity) * product.price;
+    } else {
+      const newCombo: ComboOrderRequest = {
+        comboId: product.id,
+        quantity: event.value,
+      };
+      this.comboRq.push(newCombo);
+      this.totalPrice += event.value * product.price;
+    }
   }
 
-  pad(num: number): string {
-    return num < 10 ? '0' + num : num.toString();
-  }
 
+}
+interface PageEvent {
+  first: number;
+  rows: number;
+  page: number;
+  pageCount: number;
 }

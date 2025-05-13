@@ -68,9 +68,9 @@
     align-items: center;
     padding: 20px;
     background: #e5e3e3;
-    max-height: 600px;
+    max-height: 400px;
     overflow: auto;
-    border-radius:0 0 5px 5px ;
+    border-radius: 0 0 5px 5px;
   }
 
   .seat-row {
@@ -209,7 +209,8 @@
   height: 40px;
 }
 
-.price-info, .timer {
+.price-info,
+.timer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -224,4 +225,36 @@
 .countdown {
   color: #000;
   font-size: 20px;
+}
+
+.combo {
+  .combo-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+
+::ng-deep .combo-input {
+
+  .p-inputtext {
+    padding: 0 !important;
+    text-align: center;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+  }
+
+  .p-button {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+  
+  }
+  .p-button span{
+    font-size: 10px;
+  }
 }
