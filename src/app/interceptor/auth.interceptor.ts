@@ -32,7 +32,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
             if (res.status === success) {
               localStorage.setItem('access_token', res.data.accessToken);
               localStorage.setItem('refresh_token', res.data.refreshToken);
-
               const newAuthReq = req.clone({
                 headers: req.headers.set('Authorization', `Bearer ${res.data.accessToken}`)
               });
@@ -41,15 +40,13 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
             else {
               localStorage.removeItem('access_token');
               localStorage.removeItem('refresh_token');
-              authService.logout().subscribe({
-              
+              authService.logout().subscribe({      
               });
               router.navigate(['/login']).then(
                 () => window.location.reload()
               );
               return throwError(() => undefined);
             }
-
           }), catchError(refreshErr => {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');

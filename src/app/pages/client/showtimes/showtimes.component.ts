@@ -122,7 +122,6 @@ export class ShowtimesComponent {
 
   private handleMovieResponse(res: any) {
     if (res.status === success) {
-      console.log(res);
       this.movieList = [...res.data.items];
       this.pagination.pageCount = res.data.totalElements;
     } else {
@@ -130,12 +129,15 @@ export class ShowtimesComponent {
     }
   }
   handleBuyTicket(event: { movieId: number; name: string }) {
-    this.visible = true;
+    console.log();
+
     this.movieName = event.name;
     this.#schedule.getScheduleForMovieByDate({ movieId: event.movieId, cinemaId: this.cinemaId, date: new Date(this.tabDate) }).subscribe({
       next: (res) => {
         if (res.status === success) {
+          this.schedule = [];
           this.schedule.push(res.data);
+          this.visible = true;
         }
         else {
           this.#toast.error(res.message)

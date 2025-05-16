@@ -13,13 +13,13 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
-import html2pdf from 'html2pdf.js';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
   imports: [PaginatorModule, FormsModule, TableModule,
-    DatePipe, ButtonModule, CalendarModule,
+    DatePipe, ButtonModule, CalendarModule, RouterModule,
     DialogModule, CommonModule, CurrencyPipe],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss'
@@ -37,6 +37,8 @@ export class OrderHistoryComponent {
   tickets: TicketResponse[] = [];
   date: Date | undefined;
   visible = false;
+  hasNoTicket = false;
+  isFirstLoad = true;
 
   ngOnInit(): void {
     const paginationState = this.#paginationState.getPaginationState(this.stateKey);
@@ -71,6 +73,11 @@ export class OrderHistoryComponent {
           this.pagination.rows = res.data.pageSize;
           this.pagination.pageCount = res.data.totalElements;
           this.pagination.first = this.pagination.page * this.pagination.rows;
+          if (this.isFirstLoad) {
+            this.hasNoTicket = this.tickets.length === 0;
+            console.log('hasNoTicket =', this.hasNoTicket);
+            this.isFirstLoad = false;
+          }
         }
       }, error: (error) => {
         this.#toast.error(error)
@@ -111,22 +118,7 @@ export class OrderHistoryComponent {
       }
     )
   }
-  @ViewChild('ticketContent') ticketContent!: ElementRef;
-  printPDF() {
-    const element = document.getElementById("ticketContent");
-    console.log(element);
-    if (!element) return;
-    const options = {
-      margin: 0.5,
-      filename: 'vephim.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-    };
 
-    html2pdf().from(element).set(options).save();
-
-  }
 }
 
 

@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
   user: Customer | null = null;
 
   ngOnInit() {
+
     const username = this.#customer.getCurrentUser();
     if (username) {
       this.#customer.getCustomerInfor(username).subscribe(
@@ -121,7 +122,7 @@ export class HeaderComponent implements OnInit {
       localStorage.setItem("selectedId", this.selectedId.toString());
       localStorage.setItem("cinemaName", cinema.name);
       this.saveCineme(cinema.id);
-      location.reload();
+      window.location.href = '/'
     } else {
       this.selectedId = undefined;
     }
@@ -142,7 +143,7 @@ export class HeaderComponent implements OnInit {
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
       localStorage.setItem("cinemaName", cinema.name);
-      location.reload();
+      window.location.href = '/'
       this.saveCineme(cinema.id);
       this.visible = false;
     } else {
@@ -156,7 +157,7 @@ export class HeaderComponent implements OnInit {
       localStorage.setItem("selectedId", this.cinemas[0].id.toString())
       localStorage.setItem("cinemaName", this.cinemas[0].name);
       this.selectedId = this.cinemas[0].id;
-      location.reload();
+      window.location.href = '/'
     }
   }
   menuItems: MenuItem[] = [];

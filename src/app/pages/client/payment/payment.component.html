@@ -2,7 +2,7 @@
   <h2 [ngClass]="result.paymentStatus ? 'success' : 'error'">
     {{ result.paymentStatus ? 'Giao dịch thành công' : 'Giao dịch thất bại' }}
   </h2>
-  <p>Vui lòng check Email để xem thông tin vé!</p>
+  <p *ngIf="result.paymentStatus">Vui lòng check Email để xem thông tin vé!</p>
 
   <button
     pButton

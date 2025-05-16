@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 
-import { AuthGuard } from '../../auth/auth.guard';
+import { AuthGuard } from '../../guard/auth.guard';
 
 export const ClientRoute: Route[] = [
     {
@@ -49,7 +49,8 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Đổi mật khẩu',
-                canActivate: [AuthGuard]
+                canActivate: [AuthGuard],
+                data: { roles: ['ROLE_USER'] }
             },
             {
                 path: 'update-infor',
@@ -109,7 +110,8 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Đặt vé',
-                canActivate: [AuthGuard]
+                canActivate: [AuthGuard],
+                data: { roles: ['ROLE_USER'] }
             },
             {
                 path: 'payment/result',
@@ -118,7 +120,8 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Kết quả',
-                canActivate: [AuthGuard]
+                canActivate: [AuthGuard],
+                data: { roles: ['ROLE_USER'] }
             }
             ,
             {
@@ -128,7 +131,8 @@ export const ClientRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Lịch sử thanh toán',
-                canActivate: [AuthGuard]
+                canActivate: [AuthGuard],
+                data: { roles: ['ROLE_USER'] }
             }
         ],
         title: 'Trang chủ',

@@ -40,6 +40,8 @@ export class LoginComponent {
   }
 
   login() {
+    console.log((this.loginForm.valid));
+    
     this.submitted = true;
     if (!this.loginForm.valid) {
       return;

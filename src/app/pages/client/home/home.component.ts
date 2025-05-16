@@ -15,11 +15,14 @@ import { ScheduleForCinemaResponse } from '../../../models/schedule';
 import { ScheduleService } from '../../../services/schedule/schedule.service';
 import { DialogModule } from 'primeng/dialog';
 import { ScheduleCardComponent } from '../../../components/client/schedule-card/schedule-card.component';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, TabMenuModule, PaginatorModule, MoiveCardComponent, DialogModule, ScheduleCardComponent],
+  imports: [CommonModule, TabMenuModule, PaginatorModule,
+    MoiveCardComponent, DialogModule,
+    ScheduleCardComponent, NgxSpinnerModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -43,8 +46,8 @@ export class HomeComponent {
   visible: boolean = false;
   movieName: string = '';
   cinemaName: string = '';
-
   ngOnInit() {
+
     const id = localStorage.getItem("selectedId");
     this.cinemaName = localStorage.getItem("cinemaName") ?? '';
     if (id) {
@@ -153,16 +156,17 @@ export class HomeComponent {
     }
   }
   handleBuyTicket(event: { movieId: number; name: string }) {
-    this.visible = true;
+
     this.movieName = event.name;
     this.#schedule.getScheduleForMovieByCinema({ movieId: event.movieId, cinemaId: this.cinemaId }).subscribe({
       next: (res) => {
         if (res.status === success) {
           this.schedule = res.data;
+          this.visible = true;
         }
         else {
           this.#toast.error(res.message)
-        }     
+        }
       },
       error: (err) => this.#toast.error(err)
     });

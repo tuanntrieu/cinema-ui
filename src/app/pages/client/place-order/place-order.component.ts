@@ -55,6 +55,7 @@ export class PlaceOrderComponent implements OnDestroy {
   private remainingSeconds = 600;
 
   totalPrice: number = 0;
+  totalCombo: number = 0;
   nameSelected: string[] = [];
   seat: SeatResponse[] = [];
   seatId: number[] = [];
@@ -239,8 +240,9 @@ export class PlaceOrderComponent implements OnDestroy {
       ? `${typeMap['COUPLE'].count} x ${typeMap['COUPLE'].total / typeMap['COUPLE'].count} = ${typeMap['COUPLE'].total}`
       : '';
 
+    ;
     this.totalPrice = this.seat.reduce((sum, s) => sum + s.price, 0);
-
+    this.totalPrice += this.totalCombo;
   }
 
   holdSeat(seatId: number) {
@@ -342,18 +344,21 @@ export class PlaceOrderComponent implements OnDestroy {
 
 
   onQuantityChange(event: any, product: ComboResponse) {
+    this.totalPrice -= this.totalCombo;
     const existingCombo = this.comboRq.find(combo => combo.comboId === product.id);
     if (existingCombo) {
       const oldQuantity = existingCombo.quantity;
       existingCombo.quantity = event.value;
-      this.totalPrice += (event.value - oldQuantity) * product.price;
+      this.totalCombo += (event.value - oldQuantity) * product.price;
+      this.totalPrice += this.totalCombo
     } else {
       const newCombo: ComboOrderRequest = {
         comboId: product.id,
         quantity: event.value,
       };
       this.comboRq.push(newCombo);
-      this.totalPrice += event.value * product.price;
+      this.totalCombo += event.value * product.price;
+      this.totalPrice += this.totalCombo
     }
   }
 

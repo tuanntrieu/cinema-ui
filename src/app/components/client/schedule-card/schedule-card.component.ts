@@ -27,6 +27,9 @@ export class ScheduleCardComponent implements OnInit {
   schedulePicked!: number;
   ngOnInit(): void {
     this.cinemaName = localStorage.getItem("cinemaName") ?? '';
+  }
+
+  ngOnChanges(): void {
     this.menuItems = this.schedule.map((item, index) => ({
       label: this.getLabel(new Date(item.date)),
       id: index.toString()
@@ -36,7 +39,6 @@ export class ScheduleCardComponent implements OnInit {
       this.scheduleDay = this.schedule[0].roomSchedules;
       this.date = this.schedule[0].date;
     }
-
   }
   onActiveItemChange(item: MenuItem): void {
     if (item) {

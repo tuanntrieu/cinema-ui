@@ -8,5 +8,13 @@ export const ErrorRoute: Route[] = [
                 (m) => m.featureModuleRoutes
             ),
         title: 'Không có quyền truy cập',
+    },
+      {
+        path: '**',
+        loadChildren: () =>
+            import('./not-found/feature.routes').then(
+                (m) => m.featureModuleRoutes
+            ),
+        title: 'Không tìm thấy trang',
     }
 ]

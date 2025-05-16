@@ -1,4 +1,4 @@
-<div class="order-history">
+<div class="order-history" *ngIf="!hasNoTicket">
   <div class="card">
     Ngày đặt vé:
     <p-calendar
@@ -15,7 +15,11 @@
     ></i>
   </div>
 
-  <p-table [value]="tickets" [responsiveLayout]="'scroll'">
+  <p-table
+    [value]="tickets"
+    [responsiveLayout]="'scroll'"
+    *ngIf="tickets.length > 0"
+  >
     <ng-template pTemplate="header">
       <tr class="p-grid p-nogutter">
         <th class="p-col">Mã Vé</th>
@@ -63,6 +67,7 @@
   </p-table>
 
   <p-paginator
+    *ngIf="tickets.length > 0"
     [rows]="pagination.rows"
     [totalRecords]="pagination.pageCount"
     [first]="pagination.first"
@@ -78,16 +83,7 @@
   [contentStyle]="{ 'max-height': '90vh', overflow: 'auto' }"
   [styleClass]="'custom-dialog'"
 >
-  <div style="text-align: center; margin-bottom: 20px">
-    <button
-      pButton
-      type="button"
-      label="In PDF"
-      icon="pi pi-print"
-      (click)="printPDF()"
-      style="cursor: pointer"
-    ></button>
-  </div>
+  <div style="text-align: center; margin-bottom: 20px"></div>
   <div class="container" id="ticketContent" *ngIf="ticketDetail">
     <h2>{{ ticketDetail.movieName }}</h2>
     <div class="cinema">{{ ticketDetail.cinemaName }}</div>
@@ -177,3 +173,15 @@
     </div>
   </div>
 </p-dialog>
+<div class="result-container" *ngIf="hasNoTicket">
+  <h2>Bạn chưa đặt vé nào</h2>
+  <p>Nhanh tay đặt vé nào!</p>
+
+  <button
+    pButton
+    type="button"
+    [routerLink]="['/']"
+    [label]="'Quay về trang chủ'"
+    class="p-button-rounded p-button-outlined mt-4"
+  ></button>
+</div>

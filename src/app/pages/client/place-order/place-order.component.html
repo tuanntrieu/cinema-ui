@@ -154,7 +154,7 @@
                   />
                 </td>
                 <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
+                <td>{{ product.description }}( {{product.price|currency:'VND'}})</td>
                 <td class="combo-ip">
                   <p-inputNumber
                     [min]="0"
