@@ -3,7 +3,7 @@ import { AuthGuard } from '../../guard/auth.guard';
 
 export const AdminRoute: Route[] = [
     {
-        path: '',
+        path: 'admin',
         loadComponent: () =>
             import('./admin.component').then(
                 (m) => m.AdminComponent
@@ -16,8 +16,27 @@ export const AdminRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Dashboard',
+            },
+            {
+                path: '',
+                loadChildren: () =>
+                    import('./dashboard/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Dashboard',
             }
         ],
         title: 'Trang chủ',
+        canActivate: [AuthGuard],
+        data: { roles: ['ROLE_ADMIN'] }
     }
+    ,
+    {
+        path: 'admin/login',
+        loadChildren: () =>
+            import('./loginadmin/feature.route').then(
+                (m) => m.featureModuleRoutes
+            ),
+        title: 'Đăng nhập admin',
+    },
 ]

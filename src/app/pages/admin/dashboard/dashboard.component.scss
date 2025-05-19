@@ -1,0 +1,118 @@
+.icon-box {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Colors per card */
+.bg-orders {
+    background-color: #d6e7ff; // light blue
+}
+
+.text-orders {
+    color: #2c78e4;
+}
+
+.bg-revenue {
+    background-color: #ffe4cf; // light orange
+}
+
+.text-revenue {
+    color: #ff7f00 !important;
+    font-size: 20px;
+    font-weight: 700 !important;
+}
+
+.bg-customers {
+    background-color: #cbf1f5; // light cyan
+}
+
+.text-customers {
+    color: #00bcd4 !important;
+    font-size: 20px;
+    font-weight: 700 !important;
+}
+
+.bg-sales {
+    background-color: #edd6ff; // light purple
+}
+
+.text-sales {
+    color: #b370f0 !important;
+    font-size: 20px;
+    font-weight: 700 !important;
+}
+
+::ng-deep .p-dropdown {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-weight: 500;
+    padding: 0;
+    min-height: auto;
+
+    .p-dropdown-trigger {
+        color: #6b7280; // Gray-500
+    }
+
+    &:hover {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    &:focus,
+    &.p-focus {
+        outline: none;
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+
+.rate-wrapper {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem; // tăng toàn bộ text & icon
+}
+
+.rate-icon {
+    font-size: 1.4rem;
+    margin-right: 0.4rem;
+}
+
+.rate-up {
+    color: #22c55e; // xanh lá - tương ứng text-green-500
+}
+
+.rate-down {
+    color: #ef4444; // đỏ - tương ứng text-red-500
+}
+
+.rate-text {
+    font-weight: 600;
+}
+
+.chart-wrapper {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px !important;
+}
+
+::ng-deep .p-hidden-accessible {
+    position: absolute !important;
+}
+
+.revenue {
+    width: 100%;
+    margin-top: 20px;
+}
+
+::ng-deep .table-revenue {
+    font-size: 14px !important;
+
+}
+::ng-deep .p-paginator-element{
+    font-size: 14px !important;
+}

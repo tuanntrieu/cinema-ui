@@ -1,0 +1,30 @@
+<div class="layout-topbar">
+  <img
+    src="assets/images/logo.png"
+    alt="logo"
+    style="width: 100px; margin-right: 100px"
+  />
+
+  <p-button
+    class="p-link layout-menu-button layout-topbar-button p-trigger"
+    (click)="layoutService.onMenuToggle()"
+  >
+    <i class="pi pi-bars"></i>
+  </p-button>
+
+  <div
+    class="layout-topbar-menu"
+    [ngClass]="{
+      'layout-topbar-menu-mobile-active':
+        layoutService.state.profileSidebarVisible
+    }"
+  >
+    <p-button
+      (click)="logout()"
+      label="Đăng xuất"
+      class="ml-5"
+      routerLink="/auth/login"
+      icon="pi pi-power-off"
+    ></p-button>
+  </div>
+</div>

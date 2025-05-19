@@ -21,7 +21,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [TieredMenuModule, MenubarModule, MenuModule, ImageModule, NgSelectModule, CommonModule, FormsModule, DialogModule, ButtonModule],
+  imports: [TieredMenuModule, MenubarModule,
+     MenuModule, ImageModule, NgSelectModule,
+      CommonModule, FormsModule, DialogModule, 
+      ButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

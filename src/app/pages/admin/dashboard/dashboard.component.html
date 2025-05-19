@@ -1,1 +1,312 @@
-<p>dashboard works!</p>
+<div class="surface-ground">
+  <div class="grid">
+    <!-- 1. Khách hàng mới -->
+    <div class="col-12 md:col-6 lg:col-4">
+      <div class="surface-card shadow-2 p-4 border-round">
+        <div class="flex justify-content-between align-items-center mb-1">
+          <span class="text-500 font-medium text-customers"
+            >Khách hàng mới</span
+          >
+          <p-dropdown
+            [options]="timeOptions"
+            [(ngModel)]="selectedTime"
+            placeholder="Hôm nay"
+            styleClass="custom-dropdown"
+            (onChange)="onDropDownChange($event)"
+            [style]="{ width: '145px' }"
+          ></p-dropdown>
+        </div>
+
+        <div class="flex justify-content-between align-items-center mb-2">
+          <div class="text-xl">{{ countCustomer }} khách hàng</div>
+          <div class="icon-box bg-customers">
+            <i class="pi pi-users text-customers text-xl"></i>
+          </div>
+        </div>
+
+        <div class="rate-wrapper">
+          <i
+            *ngIf="rateCustomer >= 0"
+            class="pi pi-arrow-up-right rate-icon rate-up"
+          ></i>
+          <i
+            *ngIf="rateCustomer < 0"
+            class="pi pi-arrow-down-right rate-icon rate-down"
+          ></i>
+
+          <span
+            [ngClass]="rateCustomer >= 0 ? 'rate-up' : 'rate-down'"
+            class="rate-text"
+          >
+            {{ rateCustomer >= 0 ? rateCustomer : -rateCustomer }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Số vé bán ra -->
+    <div class="col-12 md:col-6 lg:col-4">
+      <div class="surface-card shadow-2 p-4 border-round">
+        <div class="flex justify-content-between align-items-center mb-1">
+          <span class="text-500 font-medium text-sales">Số vé bán ra</span>
+          <p-dropdown
+            [options]="timeOptions"
+            [(ngModel)]="selectedTime"
+            placeholder="Hôm nay"
+            styleClass="custom-dropdown"
+            (onChange)="onDropDownChange($event)"
+            [style]="{ width: '145px' }"
+          ></p-dropdown>
+        </div>
+
+        <div class="flex justify-content-between align-items-center mb-2">
+          <div class="text-xl">{{ countTicket }} vé</div>
+          <div class="icon-box bg-sales">
+            <i class="pi pi-ticket text-sales text-xl"></i>
+          </div>
+        </div>
+
+        <div class="rate-wrapper">
+          <i
+            *ngIf="rateTicket >= 0"
+            class="pi pi-arrow-up-right rate-icon rate-up"
+          ></i>
+          <i
+            *ngIf="rateTicket < 0"
+            class="pi pi-arrow-down-right rate-icon rate-down"
+          ></i>
+
+          <span
+            [ngClass]="rateTicket >= 0 ? 'rate-up' : 'rate-down'"
+            class="rate-text"
+          >
+            {{ rateTicket >= 0 ? rateTicket : -rateTicket }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Doanh thu -->
+    <div class="col-12 md:col-6 lg:col-4">
+      <div class="surface-card shadow-2 p-4 border-round">
+        <div class="flex justify-content-between align-items-center mb-1">
+          <span class="text-500 font-medium text-revenue">Doanh thu</span>
+          <p-dropdown
+            [options]="timeOptions"
+            [(ngModel)]="selectedTime"
+            placeholder="Hôm nay"
+            styleClass="custom-dropdown"
+            [style]="{ width: '145px' }"
+            (onChange)="onDropDownChange($event)"
+          ></p-dropdown>
+        </div>
+
+        <div class="flex justify-content-between align-items-center mb-2">
+          <div class="text-xl">{{ sumTotal | currency : "VND" }} VND</div>
+          <div class="icon-box bg-revenue">
+            <i class="pi pi-dollar text-revenue text-xl"></i>
+          </div>
+        </div>
+
+        <div class="rate-wrapper">
+          <i
+            *ngIf="rateTotal >= 0"
+            class="pi pi-arrow-up-right rate-icon rate-up"
+          ></i>
+          <i
+            *ngIf="rateTotal < 0"
+            class="pi pi-arrow-down-right rate-icon rate-down"
+          ></i>
+
+          <span
+            [ngClass]="rateTotal >= 0 ? 'rate-up' : 'rate-down'"
+            class="rate-text"
+          >
+            {{ rateTotal >= 0 ? rateTotal : -rateTotal }}%
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-wrapper surface-card shadow-2 p-4 border-round">
+    <div
+      class="flex justify-content-around md:flex-row gap-3 align-items-center"
+    >
+      <ng-select
+        class="w-full md:w-14rem"
+        [items]="cinemas"
+        bindLabel="name"
+        bindValue="id"
+        [(ngModel)]="selectedCinema"
+        placeholder="Chọn rạp chiếu"
+        (clear)="onCinemaCleared()"
+        (change)="onCinemaIdChanged($event)"
+      >
+      </ng-select>
+      <p-dropdown
+        [options]="typeOptions"
+        [(ngModel)]="selectedType"
+        optionLabel="label"
+        placeholder="Chọn loại"
+        class="w-full md:w-10rem"
+        (onChange)="onSelectTypeChange()"
+      >
+      </p-dropdown>
+      <p-calendar
+        [(ngModel)]="selectedDate"
+        [view]="calendarView"
+        [dateFormat]="calendarFormat"
+        [yearNavigator]="true"
+        (ngModelChange)="onDateChange($event)"
+        [monthNavigator]="selectedType.value === 'month'"
+        class="w-full md:w-14rem"
+      >
+      </p-calendar>
+    </div>
+    <div class="chart mt-4">
+      <div class="card">
+        <p-chart type="line" [data]="data" [options]="options" />
+      </div>
+    </div>
+  </div>
+  <div class="revenue grid surface-card shadow-2 p-3 border-round">
+    <!-- BẢNG MOVIE -->
+    <div
+      class="col-12 md:col-12 lg:col-7 surface-card shadow-2 p-4 border-round"
+    >
+      <!-- TIÊU ĐỀ -->
+      <h3 class="mb-3 text-xl font-semibold text-revenue">
+        Top doanh thu phim
+      </h3>
+
+      <!-- Lọc theo tháng và tên phim -->
+      <div
+        class="flex flex-column md:flex-row gap-3 justify-content-between mb-3 flex-wrap"
+      >
+        <!-- Lọc theo tháng -->
+        <p-calendar
+          [(ngModel)]="selectedMonthMovie"
+          view="month"
+          dateFormat="mm/yy"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+          class="w-full md:w-9rem"
+          (onSelect)="onMonthMovieSelect($event)"
+          placeholder="Chọn tháng"
+        ></p-calendar>
+
+        <!-- Tìm kiếm theo tên phim -->
+        <input
+          pInputText
+          [(ngModel)]="movieSearchKeyword"
+          (ngModelChange)="onSearchMovieChange()"
+          placeholder="Nhập tên phim"
+          class="w-full md:w-13rem"
+        />
+
+        <!-- Nút xuất Excel -->
+        <button
+          pButton
+          type="button"
+          label="Xuất Excel"
+          icon="pi pi-file-excel"
+          class="p-button-success w-full md:w-10rem"
+          style="cursor: pointer"
+          (click)="exportMovieRevenueToExcel()"
+        ></button>
+      </div>
+
+      <p-table
+        [value]="movie"
+        styleClass="p-datatable-striped table-revenue"
+        [tableStyle]="{ 'min-width': '100%', 'min-height': '300px' }"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Tên phim</th>
+            <th>Số vé bán ra</th>
+            <th style="cursor: pointer" (click)="onSortMovie()">Doanh thu</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.sumTicket }}</td>
+            <td>{{ item.totalSeat | currency : "VND" }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        *ngIf="movie.length != 0"
+        [rows]="pageMovie.rows"
+        [totalRecords]="pageMovie.pageCount"
+        [first]="pageMovie.first"
+        (onPageChange)="onPageMovieChange($event)"
+      ></p-paginator>
+    </div>
+
+    <!-- BẢNG CINEMA -->
+    <div
+      class="col-12 md:col-12 lg:col-5 surface-card shadow-2 p-4 border-round"
+    >
+      <!-- TIÊU ĐỀ -->
+      <h3 class="mb-3 text-xl font-semibold text-revenue">Top doanh thu rạp</h3>
+
+      <!-- Lọc theo tháng -->
+      <div
+        class="flex flex-column md:flex-row gap-3 justify-content-between mb-3 flex-wrap"
+      >
+        <p-calendar
+          [(ngModel)]="selectedMonthCinema"
+          view="month"
+          dateFormat="mm/yy"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+          class="w-full md:w-13rem"
+          (onSelect)="onMonthCinemaSelect($event)"
+          placeholder="Chọn tháng"
+        ></p-calendar>
+        <button
+          pButton
+          type="button"
+          label="Xuất Excel"
+          icon="pi pi-file-excel"
+          class="p-button-success w-full md:w-10rem"
+          style="cursor: pointer"
+          (click)="exportCinemaRevenueToExcel()"
+        ></button>
+      </div>
+
+      <p-table
+        [value]="cinema"
+        styleClass="p-datatable-striped table-revenue"
+        [tableStyle]="{ 'min-width': '100%', 'min-height': '300px' }"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Tên rạp</th>
+            <th>Số vé bán ra</th>
+            <th style="cursor: pointer" (click)="onSortCinema()">Doanh thu</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.cinemaName }}</td>
+            <td>{{ item.sumTickets }}</td>
+            <td>{{ item.total | currency : "VND" }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        class="paginator-custom"
+        *ngIf="cinema.length != 0"
+        [rows]="pageCinema.rows"
+        [totalRecords]="pageCinema.pageCount"
+        [first]="pageCinema.first"
+        (onPageChange)="onPageCinemaChange($event)"
+      ></p-paginator>
+    </div>
+  </div>
+</div>
