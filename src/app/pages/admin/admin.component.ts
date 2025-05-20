@@ -8,14 +8,15 @@ import { CommonModule } from '@angular/common';
 import { TopbarComponent } from '../../components/admin/topbar/topbar.component';
 import { FooterComponent } from '../../components/admin/footer/footer.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastModule } from 'primeng/toast';
 
 
 @Component({
     selector: 'app-admin',
     standalone: true,
     imports: [RouterOutlet, AppSidebarComponent,
-         CommonModule, TopbarComponent, FooterComponent
-        ,NgxSpinnerModule],
+        CommonModule, TopbarComponent, FooterComponent
+        , NgxSpinnerModule, ToastModule],
     templateUrl: './admin.component.html',
     styleUrl: './admin.component.scss'
 })

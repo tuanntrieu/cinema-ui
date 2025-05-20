@@ -1,0 +1,38 @@
+.food-wrapper {
+    width: 100%;
+    min-height: 80vh;
+}
+::ng-deep .table-food{
+    min-height: 50vh !important ;
+}
+::ng-deep .table-food .p-datatable-tbody>tr {
+    height: 30px !important;
+}
+
+::ng-deep .table-food .p-datatable-tbody>tr>td {
+    vertical-align: middle !important;
+    padding: 0.5rem 1rem;
+}
+
+
+.icon-box {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.bg-delete {
+    background-color: #edafaf;
+
+}
+
+.text-delete {
+    color: #ef5f5f;
+    font-size: 16px;
+    font-weight: 700 !important;
+}

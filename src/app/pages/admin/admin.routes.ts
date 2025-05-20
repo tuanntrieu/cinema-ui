@@ -24,6 +24,23 @@ export const AdminRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Dashboard',
+            },
+            {
+                path: 'movie-type',
+                loadChildren: () =>
+                    import('./movie-type/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Dashboard',
+            }
+            ,
+            {
+                path: 'food',
+                loadChildren: () =>
+                    import('./food/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Dashboard',
             }
         ],
         title: 'Trang chủ',

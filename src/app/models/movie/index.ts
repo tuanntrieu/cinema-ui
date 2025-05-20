@@ -16,7 +16,7 @@ export interface MovieRequest {
     endDate: Date;
     movieTypeId: number[];
     ageLimit: number;
-    trailer:string;
+    trailer: string;
 }
 
 export interface MovieResponse {
@@ -33,7 +33,7 @@ export interface MovieResponse {
     ageLimit: number;
     image: string;
     director: string;
-    trailer:string;
+    trailer: string;
 }
 export interface MovieDetailResponse {
     id: number;
@@ -47,11 +47,17 @@ export interface MovieDetailResponse {
     endDate: Date;
     types: MovieType[];
     ageLimit: number;
-    trailer:string;
+    trailer: string;
     image: string;
     director: string;
 }
 export interface MovieType {
     id: number;
     name: string
+}
+export interface MovieTypeRequest {
+    name: string;
+}
+export interface MovieTypeSearchRequest extends PageRequest{
+    name: string | null;
 }

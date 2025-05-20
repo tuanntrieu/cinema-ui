@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { LayoutService } from '../../../services/layout/layout.service';
 import { CommonModule } from '@angular/common';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ToastService } from '../../../services/toast/toast.service';
 
@@ -27,12 +27,17 @@ export class MenuComponent implements OnInit {
       {
         label: 'Danh mục',
         icon: 'pi pi-fw pi-briefcase',
-        routerLink: ['/pages'],
+        routerLink: ['/admin'],
         items: [
           {
             label: 'Trang chủ',
             icon: 'pi pi-fw pi-home',
-            routerLink: ['/admin']
+            routerLink: '/admin'
+          },
+          {
+            label: 'Thể loại',
+            icon: 'pi pi-file-edit',
+            routerLink: '/admin/movie-type'
           },
           {
             label: 'Rạp',
@@ -56,8 +61,8 @@ export class MenuComponent implements OnInit {
           },
           {
             label: 'Đồ ăn ',
-            icon: 'pi pi-fw pi-apple'
-
+            icon: 'pi pi-fw pi-apple',
+            routerLink: '/admin/food'
           }
           ,
           {

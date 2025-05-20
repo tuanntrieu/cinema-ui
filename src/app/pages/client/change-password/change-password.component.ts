@@ -78,7 +78,6 @@ export class ChangePasswordComponent implements OnInit {
     return "";
   }
   confirm() {
-
     this.#confirm.confirm({
       message: 'Bạn có chắc muốn đổi mật khẩu không?',
       header: 'Xác nhận',

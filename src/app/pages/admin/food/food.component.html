@@ -1,0 +1,109 @@
+<div class="surface-card shadow-2 p-4 border-round food-wrapper">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Đồ ăn
+  </h2>
+
+  <div class="flex flex-column">
+    <div class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap">
+      <button
+        pButton
+        type="button"
+        label="Thêm mới"
+        icon="pi pi-plus"
+        class="p-button-success w-full md:w-9rem p-2 align-items-center"
+        style="cursor: pointer"
+        (click)="onAddClick()"
+      ></button>
+      <input
+        pInputText
+        [(ngModel)]="nameSearch"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Nhập tên đồ ăn "
+        class="w-full md:w-13rem"
+      />
+    </div>
+    <p-table [value]="foods" styleClass="p-datatable-striped table-food">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Tên đồ ăn</th>
+          <th class="flex justify-content-center">Thao tác</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>
+            <div class="flex justify-content-center gap-4">
+              <div class="bg-delete icon-box" (click)="confirmDelete(item)">
+                <i class="pi pi-trash text-delete"></i>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      *ngIf="foods.length != 0"
+      [rows]="paginator.rows"
+      [totalRecords]="paginator.pageCount"
+      [first]="paginator.first"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
+</div>
+<p-dialog
+  header="Header"
+  [(visible)]="visibleAdd"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+>
+  <ng-template pTemplate="header">
+    <div
+      class="inline-flex align-items-center justify-content-center gap-2 p-2"
+      style="font-weight: 600; font-size: 20px; color: #007ad9"
+    >
+      THÊM đồ ăn
+    </div>
+  </ng-template>
+  <hr />
+  <form
+    class="w-full md:w-10 mx-auto"
+    (ngSubmit)="create()"
+    [formGroup]="createForm"
+  >
+    <label for="name" class="block text-900 text-xl font-medium mb-2"
+      >Tên đồ ăn
+    </label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Nhập tên đồ ăn "
+      pInputText
+      class="w-full"
+      style="padding: 1rem"
+    />
+    <div
+      *ngIf="createSubmitted && (createForm.controls['name'].errors?.['required'] || createForm.controls['name'].errors?.['whitespace']
+            )"
+      class="invalid-feedback mt-2 ps-1"
+    >
+      <div style="color: red">Tên không được trống!</div>
+    </div>
+    <div class="flex justify-content-end gap-2 mt-5">
+      <p-button
+        label="Hủy"
+        severity="secondary"
+        (onClick)="visibleAdd = false"
+      />
+      <p-button label="Thêm" type="submit" />
+    </div>
+  </form>
+</p-dialog>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
