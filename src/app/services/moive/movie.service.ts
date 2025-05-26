@@ -23,7 +23,16 @@ export class MovieService {
       })
     );
   }
-
+  getAllMovie(rq: MovieSearchRequest): Observable<any> {
+    return this.#http.post(`${this.#url}/get-all`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
   getMoviesCoomingSoon(rq: MovieSearchRequest): Observable<any> {
     return this.#http.post(`${this.#url}/search-coming-soon`, rq).pipe(
       catchError((error) => {

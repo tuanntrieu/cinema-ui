@@ -35,7 +35,6 @@ export class LoginadminComponent {
       username: ['', [Validators.required, noWhiteSpace()]],
       password: ['', [Validators.required, noWhiteSpace()]]
     });
-
   }
   login() {
     this.submitted = true;

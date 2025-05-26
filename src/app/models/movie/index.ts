@@ -3,21 +3,22 @@ import { PageRequest } from "../page";
 export interface MovieSearchRequest extends PageRequest {
     cinemaId: number;
     dateSearch: Date;
+    name:string;
 }
 
-export interface MovieRequest {
-    name: string;
-    actors: string;
-    duration: number;
-    description: string;
-    language: string;
-    isSub: string;
-    releaseDate: Date;
-    endDate: Date;
-    movieTypeId: number[];
-    ageLimit: number;
-    trailer: string;
-}
+    export interface MovieRequest {
+        name: string;
+        actors: string;
+        duration: number;
+        description: string;
+        language: string;f
+        isSub: string;
+        releaseDate: Date;
+        endDate: Date;
+        movieTypeId: number[];
+        ageLimit: number;
+        trailer: string;
+    }
 
 export interface MovieResponse {
     id: number;

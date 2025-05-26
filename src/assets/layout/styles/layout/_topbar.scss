@@ -1,4 +1,4 @@
-.layout-topbar {
+ .layout-topbar {
     position: fixed;
     height: 5rem;
     z-index: 997;
@@ -38,8 +38,8 @@
         position: relative;
         color: var(--text-color-secondary);
         border-radius: 50%;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1.2rem ;
+        height: 1.2rem;
         cursor: pointer;
         transition: background-color $transitionDuration;
 
@@ -70,7 +70,7 @@
         display: none;
        
         i {
-            font-size: 1.25rem;
+            font-size: 1rem;
         }
     }
 

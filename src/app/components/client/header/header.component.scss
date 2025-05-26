@@ -55,7 +55,7 @@
     transition: all 0.3s ease;
 
     .p-button-label {
-        font-weight: 100;
+        font-weight: 00;
         color: black;
         opacity: 80%;
     }
@@ -94,11 +94,16 @@
     padding: 0.5rem 0;
 
     .p-menuitem-link {
+        .p-menuitem-text,
+            .p-menuitem-icon {
+                font-size: 0.95rem !important;
+            }
         &:hover {
             background-color: var(--surface-hover) !important;
 
             .p-menuitem-text,
             .p-menuitem-icon {
+                font-size: 0.95rem !important;
                 color: var(--primary-color) !important;
             }
         }

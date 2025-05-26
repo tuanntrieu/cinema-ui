@@ -65,5 +65,15 @@ export class RoomService {
       })
     );
   }
+  getAllRoomType():Observable<any> {
+    return this.#http.get(`${this.#url}/get-all-room-types`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 
 }

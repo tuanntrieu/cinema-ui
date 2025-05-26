@@ -1,0 +1,225 @@
+<div class="surface-card p-5 shadow-3 border-round mx-auto">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Tạo Phim Mới
+  </h2>
+
+  <form (ngSubmit)="saveMovie()" [formGroup]="createForm">
+    <div class="formgrid grid">
+      <!-- Tên phim -->
+      <div class="field col-12 md:col-6">
+        <label for="name">Tên phim</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          class="w-full"
+          required
+        />
+        <div
+          *ngIf="submitted && (createForm.controls['name'].errors?.['required'] || createForm.controls['name'].errors?.['whitespace'])"
+          class="invalid-feedback mt-2 ps-1"
+        >
+          <div style="color: red">Tên phim không được để trống !</div>
+        </div>
+      </div>
+
+      <!-- Ngôn ngữ -->
+      <div class="field col-12 md:col-6">
+        <label for="language">Ngôn ngữ</label>
+        <input
+          id="language"
+          type="text"
+          pInputText
+          formControlName="language"
+          class="w-full"
+        />
+        <div
+          *ngIf="submitted && (createForm.controls['language'].errors?.['required'] || createForm.controls['language'].errors?.['whitespace'])"
+          class="invalid-feedback mt-2 ps-1"
+        >
+          <div style="color: red">Ngôn ngữ không được để trống !</div>
+        </div>
+      </div>
+
+      <!-- Diễn viên -->
+      <div class="field col-12 md:col-6">
+        <label for="actors">Diễn viên</label>
+        <input
+          id="actors"
+          type="text"
+          pInputText
+          formControlName="actors"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Đạo diễn -->
+      <div class="field col-12 md:col-6">
+        <label for="director">Đạo diễn</label>
+        <input
+          id="director"
+          type="text"
+          pInputText
+          formControlName="director"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Trailer -->
+      <div class="field col-12 md:col-6">
+        <label for="trailer">Trailer</label>
+        <input
+          id="trailer"
+          type="text"
+          pInputText
+          formControlName="trailer"
+          class="w-full"
+        />
+        <div
+          *ngIf="submitted && createForm.controls['trailer'].errors?.['invalidYoutubeLink']"
+          class="invalid-feedback mt-2 ps-1"
+        >
+          <div style="color: red">
+            Link trailer không hợp lệ (phải là link YouTube)!
+          </div>
+        </div>
+      </div>
+
+      <!-- Thời lượng -->
+      <div class="field col-12 md:col-6">
+        <label for="duration">Thời lượng (>=60 phút)</label>
+        <p-inputNumber
+          formControlName="duration"
+          inputId="duration"
+          class="w-full"
+          [min]="60"
+        ></p-inputNumber>
+      </div>
+
+      <!-- Giới hạn tuổi -->
+      <div class="field col-12 md:col-6">
+        <label for="ageLimit">Giới hạn tuổi</label>
+        <p-inputNumber
+          formControlName="ageLimit"
+          inputId="ageLimit"
+          class="w-full"
+          [min]="0"
+        ></p-inputNumber>
+      </div>
+
+      <!-- Phụ đề -->
+      <div class="field col-12 md:col-6 flex align-items-center">
+        <label for="isSub" class="mr-3">Phụ đề </label>
+        <p-checkbox
+          formControlName="isSub"
+          [binary]="true"
+          inputId="isSub"
+        ></p-checkbox>
+      </div>
+
+      <!-- Ngày ra mắt -->
+      <div class="field col-12 md:col-6 flex flex-column">
+        <label for="releaseDate">Ngày khởi chiếu</label>
+        <p-calendar
+          formControlName="releaseDate"
+          inputId="releaseDate"
+          name="releaseDate"
+          [view]="'date'"
+          dateFormat="dd-mm-yy"
+          styleClass="w-full"
+          [minDate]="minDate"
+          [inputStyle]="{ width: '100%' }"
+          (ngModelChange)="onReleaseDateChange()"
+        ></p-calendar>
+      </div>
+
+      <!-- Ngày kết thúc -->
+      <div class="field col-12 md:col-6 flex flex-column">
+        <label for="endDate">Ngày kết thúc</label>
+        <p-calendar
+          formControlName="endDate"
+          inputId="endDate"
+          name="endDate"
+          [view]="'date'"
+          dateFormat="dd-mm-yy"
+          styleClass="w-full"
+          [minDate]="minEndDate"
+          [inputStyle]="{ width: '100%' }"
+        ></p-calendar>
+      </div>
+
+      <div class="field col-12 flex flex-column">
+        <label for="movieTypeId">Thể loại</label>
+        <p-multiSelect
+          formControlName="movieTypeId"
+          [options]="movieTypes"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Chọn thể loại"
+          class="w-full"
+        ></p-multiSelect>
+      </div>
+      <div class="field col-12 flex flex-column">
+        <label for="movieTypeId">Mô tả</label>
+        <textarea
+          rows="5"
+          cols="30"
+          pInputTextarea
+          formControlName="description"
+        >
+        </textarea>
+        <div
+          *ngIf="submitted && (createForm.controls['description'].errors?.['required'] || createForm.controls['description'].errors?.['whitespace'])"
+          class="invalid-feedback mt-2 ps-1"
+        >
+          <div style="color: red">Vui lòng nhập mô tả!</div>
+        </div>
+      </div>
+      <div class="field col-12 gap-2">
+        <label for="image">Hình ảnh</label>
+        <div class="image-upload-row">
+          <img
+            *ngIf="imagePreview"
+            [src]="imagePreview"
+            alt="Preview"
+            class="combo-img-preview"
+          />
+          <img
+            *ngIf="!imagePreview"
+            src="assets/images/no-image.jpg"
+            alt="Preview"
+            class="combo-img-preview"
+          />
+
+          <div class="action-buttons">
+            <p-fileUpload
+              #fileUploader
+              mode="basic"
+              class="upload-icon-button p-button-rounded"
+              chooseIcon="pi pi-cloud-upload"
+              [auto]="true"
+              maxFileSize="10000000"
+              accept="image/*"
+              (onSelect)="onSelect($event)"
+            ></p-fileUpload>
+
+            <button
+              type="button"
+              pButton
+              icon="pi pi-times"
+              class="p-button-rounded p-button-text p-button-danger"
+              (click)="clearImage()"
+            ></button>
+          </div>
+        </div>
+        <div *ngIf="error" class="invalid-feedback mt-1 p-2">
+          <div style="color: red">{{ error }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút Submit -->
+    <button type="submit" pButton label="Lưu" class="mt-3"></button>
+  </form>
+</div>

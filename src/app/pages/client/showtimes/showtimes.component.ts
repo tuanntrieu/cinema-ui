@@ -111,7 +111,8 @@ export class ShowtimesComponent {
       sortBy: 'created_date',
       isAscending: false,
       cinemaId: this.cinemaId,
-      dateSearch: new Date(this.tabDate)
+      dateSearch: new Date(this.tabDate),
+      name:''
     };
 
     this.#movie.getMoviesByDate(request).subscribe({

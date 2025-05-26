@@ -43,7 +43,7 @@
       routerLink="/register"
     />
   </div>
-  <div class="col-12 md:col-2 flex align-items-center p-4" *ngIf="user">
+  <div class="col-12 md:col-2 flex align-items-center p-2" *ngIf="user">
     <p-tieredMenu #menu [model]="menuItems" [popup]="true"></p-tieredMenu>
     <div
       (click)="menu.toggle($event)"

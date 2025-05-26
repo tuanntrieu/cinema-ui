@@ -1,0 +1,43 @@
+/* Ẩn SVG checkmark */
+::ng-deep .p-hidden-accessible {
+    display: none;
+}
+
+::ng-deep .p-inputnumber {
+    width: 100%;
+}
+
+::ng-deep .p-multiselect {
+    width: 100%;
+}
+
+.upload-icon-button ::ng-deep .p-button {
+    border: none;
+    background-color: transparent;
+    color: #2196f3;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.combo-img-preview {
+    width: 130px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}   

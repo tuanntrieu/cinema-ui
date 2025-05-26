@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { PaginatorModule } from 'primeng/paginator';
-import { MovieResponse, MovieSearchRequest } from '../../../models/movie';
+
 import { success } from '../../../utils/constants';
 import { MoiveCardComponent } from '../../../components/client/moive-card/moive-card.component';
 import { PaginationStateService } from '../../../services/pagination/pagination-state.service';
@@ -15,7 +15,8 @@ import { ScheduleForCinemaResponse } from '../../../models/schedule';
 import { ScheduleService } from '../../../services/schedule/schedule.service';
 import { DialogModule } from 'primeng/dialog';
 import { ScheduleCardComponent } from '../../../components/client/schedule-card/schedule-card.component';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { MovieResponse, MovieSearchRequest } from '../../../models/movie';
 
 @Component({
   selector: 'app-home',
@@ -108,7 +109,8 @@ export class HomeComponent {
       sortBy: 'created_date',
       isAscending: false,
       cinemaId: this.cinemaId,
-      dateSearch: new Date()
+      dateSearch: new Date(),
+      name: ''
     };
     this.#movie.getMoviesByDate(request).subscribe({
       next: (res: any) => {
@@ -128,7 +130,8 @@ export class HomeComponent {
       sortBy: 'created_date',
       isAscending: false,
       cinemaId: this.cinemaId,
-      dateSearch: new Date()
+      dateSearch: new Date(),
+      name:''
     };
 
     this.#movie.getMoviesCoomingSoon(request).subscribe({

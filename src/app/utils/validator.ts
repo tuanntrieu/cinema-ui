@@ -42,3 +42,16 @@ export function isPhoneNumber(): AsyncValidatorFn {
         return of(valid ? null : { invalidPhoneNumber: true });
     };
 }
+export function youtubeLinkValidator(): ValidatorFn {
+  const YOUTUBE_REGEX = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/(watch\?v=)?([a-zA-Z0-9_-]{11})(.*)?$/;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) {
+      return null; 
+    }
+    return YOUTUBE_REGEX.test(value)
+      ? null
+      : { invalidYoutubeLink: true };
+  };
+}

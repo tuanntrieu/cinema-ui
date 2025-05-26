@@ -4,9 +4,7 @@
   </h2>
 
   <div class="flex flex-column">
-    <div
-      class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap"
-    >
+    <div class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap">
       <button
         pButton
         type="button"
@@ -15,6 +13,7 @@
         class="p-button-success w-full md:w-9rem p-2 align-items-center"
         style="cursor: pointer"
         (click)="onAddClick()"
+        [rounded]="true"
       ></button>
       <input
         pInputText

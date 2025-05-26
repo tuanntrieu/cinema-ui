@@ -1,0 +1,214 @@
+<div class="surface-card shadow-2 p-4 border-round combo-wrapper">
+  <h2 class="mb-3 text-xxl font-semibold text-primary">Quản lý combo</h2>
+
+  <div
+    class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap align-items-center"
+  >
+    <button
+      pButton
+      type="button"
+      label="Thêm mới"
+      icon="pi pi-plus"
+      class="p-button-success w-full md:w-auto p-2"
+      style="cursor: pointer; min-width: 144px"
+      (click)="onpenCreateDialog()"
+    ></button>
+    <input
+      pInputText
+      [(ngModel)]="nameSearch"
+      placeholder="Nhập tên combo"
+      class="w-full md:w-auto"
+      style="min-width: 208px"
+      (ngModelChange)="onSearchChange()"
+    />
+  </div>
+
+  <p-table
+    [value]="combos"
+    class="p-datatable-striped"
+    [responsiveLayout]="'scroll'"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Hình ảnh</th>
+        <th>Tên combo</th>
+        <th>Chi tiết</th>
+        <th>Giá</th>
+        <th class="text-center">Thao tác</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-combo>
+      <tr>
+        <td>
+          <img
+            [src]="combo.image"
+            alt="combo image"
+            width="100"
+            class="combo-img-preview border-round shadow-2"
+          />
+        </td>
+        <td>{{ combo.name }}</td>
+        <td>{{ combo.description }}</td>
+        <td>{{ combo.price | currency : "VND" }}</td>
+        <td>
+          <div class="flex justify-content-center gap-2">
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-text p-button-danger"
+              (click)="onDelete(combo)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    *ngIf="combos.length != 0"
+    [rows]="pagination.rows"
+    [totalRecords]="pagination.pageCount"
+    [first]="pagination.first"
+    (onPageChange)="onPageChange($event)"
+  ></p-paginator>
+</div>
+
+<p-dialog
+  header="Thêm Combo"
+  [(visible)]="visibleAdd"
+  [modal]="true"
+  [style]="{ width: '40vw', maxWidth: '600px', minWidth: '320px' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+>
+  <div class="flex flex-column gap-3">
+    <div class="flex flex-column gap-2">
+      <label for="name">Tên Combo</label>
+      <input
+        id="name"
+        pInputText
+        [(ngModel)]="comboRequest.name"
+        placeholder="Nhập Tên"
+        class="w-full"
+      />
+    </div>
+
+    <div class="flex flex-column gap-2 mt-3">
+      <label for="price">Giá</label>
+      <p-inputNumber
+        id="price"
+        min="0"
+        [(ngModel)]="comboRequest.price"
+        placeholder="Nhập Giá"
+        class="w-full"
+      ></p-inputNumber>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="image">Hình ảnh</label>
+      <div class="image-upload-row">
+        <img
+          *ngIf="imagePreview"
+          [src]="imagePreview"
+          alt="Preview"
+          class="combo-img-preview"
+        />
+        <img
+          *ngIf="!imagePreview"
+          src="assets/images/no-image.jpg"
+          alt="Preview"
+          class="combo-img-preview"
+        />
+
+        <div class="action-buttons">
+          <p-fileUpload
+            #fileUploader
+            mode="basic"
+            class="upload-icon-button p-button-rounded"
+            chooseIcon="pi pi-cloud-upload"
+            [auto]="true"
+            maxFileSize="10000000"
+            accept="image/*"
+            (onSelect)="onSelect($event)"
+          ></p-fileUpload>
+
+          <button
+            type="button"
+            pButton
+            icon="pi pi-times"
+            class="p-button-rounded p-button-text p-button-danger"
+            (click)="clearImage()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-column gap-2 mt-3">
+      <label>Đồ ăn</label>
+      <div
+        *ngFor="let food of comboRequest.comboDetails; let i = index"
+        class="food-row"
+      >
+        <ng-select
+          class="foods-select"
+          [items]="foods"
+          bindLabel="name"
+          bindValue="id"
+          placeholder="Chọn đồ ăn"
+          [clearable]="false"
+          [(ngModel)]="comboRequest.comboDetails[i].foodId"
+          (ngModelChange)="onFoodSelect($event, i)"
+        ></ng-select>
+
+        <p-inputNumber
+          [(ngModel)]="food.quantity"
+          placeholder="Số lượng"
+          min="1"
+        ></p-inputNumber>
+
+        <button
+          type="button"
+          pButton
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-text p-button-danger"
+          (click)="removeFood(i)"
+        ></button>
+      </div>
+
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        label="Thêm món"
+        class="p-button-sm"
+        (click)="addFood()"
+      ></button>
+    </div>
+
+    <div *ngIf="error" class="invalid-feedback mt-1 p-2">
+      <div style="color: red">{{ error }}</div>
+    </div>
+
+    <div class="flex justify-content-end mt-3 gap-2">
+      <button
+        type="button"
+        pButton
+        label="Hủy"
+        class="p-button-text"
+        (click)="visibleAdd = false"
+      ></button>
+      <button
+        type="button"
+        pButton
+        label="Lưu"
+        class="p-button-primary"
+        (click)="saveCombo()"
+      ></button>
+    </div>
+  </div>
+</p-dialog>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>

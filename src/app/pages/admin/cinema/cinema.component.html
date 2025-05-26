@@ -1,0 +1,75 @@
+<div class="surface-card shadow-2 p-4 border-round cinema-wrapper">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý rạp
+  </h2>
+  <div class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap">
+    <button
+      pButton
+      type="button"
+      label="Thêm mới"
+      icon="pi pi-plus"
+      class="p-button-success w-full md:w-9rem p-2 align-items-center"
+      style="cursor: pointer"
+      [rounded]="true"
+    ></button>
+    <input
+      pInputText
+      [(ngModel)]="nameSearch"
+      placeholder="Nhập tên rạp"
+      class="w-full md:w-13rem"
+    />
+  </div>
+  <p-table
+    [value]="cinemas"
+    class="p-datatable-sm table-cinema"
+    [tableStyle]="{ 'min-width': '100%', 'min-height': '400px' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Tên rạp</th>
+        <th>Đia chỉ</th>
+        <th>Số phòng</th>
+        <th>Thao tác</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-cinema>
+      <tr>
+        <td>{{ cinema.cinemaName }}</td>
+        <td>
+          {{
+            cinema.detailAddress +
+              ", " +
+              cinema.district +
+              ", " +
+              cinema.ward +
+              ", " +
+              cinema.province
+          }}
+        </td>
+        <td>4</td>
+
+        <td>
+          <div class="flex justify-content-center gap-2">
+            <div class="bg-view icon-box">
+              <i class="pi pi-eye text-view"></i>
+            </div>
+            <div class="bg-edit icon-box">
+              <i class="pi pi-pen-to-square text-edit"></i>
+            </div>
+            <div class="bg-delete icon-box">
+              <i class="pi pi-trash text-delete"></i>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    *ngIf="cinemas.length != 0"
+    [rows]="pagination.rows"
+    [totalRecords]="pagination.pageCount"
+    [first]="pagination.first"
+  ></p-paginator>
+</div>

@@ -1,0 +1,71 @@
+<div class="surface-card shadow-2 p-4 border-round movie-wrapper">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý phim
+  </h2>
+  <div class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap">
+    <button
+      pButton
+      type="button"
+      label="Thêm mới"
+      icon="pi pi-plus"
+      class="p-button-success w-full md:w-9rem p-2 align-items-center"
+      style="cursor: pointer"
+      [routerLink]="'/admin/create-movie'"
+      [rounded]="true"
+    ></button>
+    <input
+      pInputText
+      [(ngModel)]="nameSearch"
+      placeholder="Nhập tên phim"
+      class="w-full md:w-13rem"
+    />
+  </div>
+  <p-table [value]="movieList" class="p-datatable-striped" >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Ảnh</th>
+        <th>Tên</th>
+        <th>Thể loại</th>
+        <th>Thời lượng (phút)</th>
+        <th>Ngày khởi chiếu</th>
+        <th>Ngày kết thúc</th>
+        <th>Thao tác</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-movie>
+      <tr>
+        <td>
+          <img
+            [src]="movie.image"
+            alt="movie image"
+            width="100"
+            class="border-round shadow-2"
+          />
+        </td>
+        <td>{{ movie.name }}</td>
+        <td>{{ movie.type || "Đang cập nhật" }}</td>
+        <td>{{ movie.duration }} phút</td>
+        <td>{{ movie.releaseDate | date : "dd/MM/yyyy" }}</td>
+        <td>{{ movie.endDate | date : "dd/MM/yyyy" }}</td>
+        <td>
+          <div class="flex justify-content-center gap-2">
+            <div class="bg-edit icon-box">
+              <i class="pi pi-pen-to-square text-edit"></i>
+            </div>
+            <div class="bg-delete icon-box">
+              <i class="pi pi-trash text-delete"></i>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator
+    *ngIf="movieList.length != 0"
+    [rows]="pagination.rows"
+    [totalRecords]="pagination.pageCount"
+    [first]="pagination.first"
+    (onPageChange)="onPageChange($event)"
+  ></p-paginator>
+</div>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
-import { UpdateSeatStatusRequest } from '../../models/seat';
+import { UpdateSeatPriceRequest, UpdateSeatStatusRequest } from '../../models/seat';
 import { baseUrl } from '../../utils/constants';
 import { mapError } from '../../utils/exception';
 
@@ -58,4 +58,25 @@ export class SeatService {
       })
     );
   }
+  getAllSeatPrice(): Observable<any> {
+    return this.#http.get(`${this.#url}/get-all-seat-price`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  updateSeatPrice(rq: UpdateSeatPriceRequest): Observable<any> {
+    return this.#http.patch(`${this.#url}/update-price`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
 }

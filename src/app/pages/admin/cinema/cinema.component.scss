@@ -1,0 +1,55 @@
+.cinema-wrapper {
+    width: 100%;
+    min-height: 80vh;
+}
+
+.icon-box {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.bg-edit {
+    background-color: #ffe4cf;
+}
+
+.text-edit {
+    color: #ff7f00 !important;
+    font-size: 16px;
+    font-weight: 700 !important;
+}
+
+.bg-delete {
+    background-color: #edafaf;
+
+}
+
+.text-delete {
+    color: #ef5f5f;
+    font-size: 16px;
+    font-weight: 700 !important;
+}
+.bg-view {
+    background-color: #99e3c8;
+
+}
+
+.text-view {
+    color: #18c493;
+    font-size: 16px;
+    font-weight: 700 !important;
+}
+
+
+::ng-deep .table-cinema .p-datatable-tbody>tr {
+    height: 30px !important;
+}
+
+::ng-deep .table-cinema .p-datatable-tbody>tr>td {
+    vertical-align: middle !important;
+    padding: 0.5rem 1rem;
+}

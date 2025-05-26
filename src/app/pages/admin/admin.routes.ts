@@ -31,7 +31,7 @@ export const AdminRoute: Route[] = [
                     import('./movie-type/feature.route').then(
                         (m) => m.featureModuleRoutes
                     ),
-                title: 'Dashboard',
+                title: 'Quản lý thể loại phim ',
             }
             ,
             {
@@ -40,7 +40,57 @@ export const AdminRoute: Route[] = [
                     import('./food/feature.route').then(
                         (m) => m.featureModuleRoutes
                     ),
-                title: 'Dashboard',
+                title: 'Quản lý đồ ăn ',
+            },
+            {
+                path: 'price',
+                loadChildren: () =>
+                    import('./price/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý giá vé ',
+            }
+            ,
+            {
+                path: 'movie',
+                loadChildren: () =>
+                    import('./movie/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý phim ',
+            }
+            ,
+            {
+                path: 'cinema',
+                loadChildren: () =>
+                    import('./cinema/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý rạp phim',
+            },
+            {
+                path: 'schedule',
+                loadChildren: () =>
+                    import('./schedule/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý lịch chiếu ',
+            },
+            {
+                path: 'combo',
+                loadChildren: () =>
+                    import('./combo/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý combo',
+            },
+            {
+                path: 'create-movie',
+                loadChildren: () =>
+                    import('./create-movie/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Thêm phim ',
             }
         ],
         title: 'Trang chủ',

@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { baseUrl } from '../../utils/constants';
 import { catchError, Observable, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
+import { CinemaSearchRequest } from '../../models/cinema';
+
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,16 @@ export class CinemaService {
   getAllCinema(): Observable<any> {
     return this.#http.get(`${this.#url}load-all-cinema`).pipe(
 
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  getAllCinemaPage(rq: CinemaSearchRequest): Observable<any> {
+    return this.#http.post(`${this.#url}get-all`, rq).pipe(
       catchError((error) => {
         if (error?.error) {
           return mapError(error.error);

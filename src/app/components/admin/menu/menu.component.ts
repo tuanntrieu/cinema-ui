@@ -42,22 +42,22 @@ export class MenuComponent implements OnInit {
           {
             label: 'Rạp',
             icon: 'pi pi-fw pi-desktop',
-
+            routerLink: '/admin/cinema'
           },
           {
             label: 'Phim',
             icon: 'pi pi-fw pi-video',
-
+            routerLink: '/admin/movie'
           },
           {
             label: 'Lịch chiếu ',
             icon: 'pi pi-fw pi-calendar',
-
+            routerLink: '/admin/schedule'
           },
           {
             label: 'Giá vé ',
-            icon: 'pi pi-fw pi-ticket'
-
+            icon: 'pi pi-fw pi-ticket',
+            routerLink: '/admin/price'
           },
           {
             label: 'Đồ ăn ',
@@ -67,7 +67,8 @@ export class MenuComponent implements OnInit {
           ,
           {
             label: 'Combo ',
-            icon: 'pi pi-fw pi-turkish-lira'
+            icon: 'pi pi-fw pi-turkish-lira',
+            routerLink: '/admin/combo'
           }
         ]
       },

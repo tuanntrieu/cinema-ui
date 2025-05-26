@@ -1,0 +1,103 @@
+<div class="p-4 surface-card shadow-2 border-round">
+  <!-- Bộ lọc -->
+  <div
+    class="flex flex-wrap gap-3 align-items-center justify-content-between mb-4"
+  >
+    <div class="flex gap-3 align-items-center">
+      <p-dropdown
+        placeholder="Rạp"
+        [options]="cinemas"
+        optionLabel="name"
+        class="w-12rem"
+      >
+      </p-dropdown>
+
+
+      <p-calendar
+        [(ngModel)]="selectedDate"
+        placeholder="Ngày chiếu"
+        dateFormat="yy-mm-dd"
+        class="w-12rem"
+      >
+      </p-calendar>
+    </div>
+
+    <button
+      pButton
+      type="button"
+      label="Chấp nhận"
+      class="p-button-primary"
+    ></button>
+  </div>
+
+  <!-- Bảng thông tin phòng -->
+  <p-table [value]="rooms" class="mb-4">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>PHÒNG</th>
+        <th>LOẠI PHÒNG</th>
+        <th>GHẾ</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-room>
+      <tr>
+        <td>{{ room.name }}</td>
+        <td>{{ room.type }}</td>
+        <td>{{ room.seats }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Bảng lịch chiếu -->
+  <p-table [value]="showtimes" styleClass="p-datatable-striped table-type">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>THỜI GIAN</th>
+        <th>PHIM</th>
+        <th>TRẠNG THÁI</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-show>
+      <tr>
+        <td>{{ show.time }}</td>
+        <td>{{ show.title }}</td>
+        <td>
+          <span
+            class="px-3 py-1 border-round text-white font-semibold text-xs"
+            [ngClass]="{
+              'bg-green-500': show.status === 'ONLINE',
+              'bg-gray-500': show.status === 'OFFLINE'
+            }"
+          >
+            {{ show.status }}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Nút thao tác -->
+  <div class="flex justify-content-between mt-4">
+    <button
+      pButton
+      type="button"
+      label="Thêm"
+      icon="pi pi-plus"
+      class="p-button-outlined p-button-info"
+    ></button>
+    <div class="flex gap-2">
+      <button
+        pButton
+        type="button"
+        label="Thay đổi trạng thái tất cả"
+        class="p-button-warning"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Delete all"
+        class="p-button-danger"
+      ></button>
+    </div>
+  </div>
+</div>

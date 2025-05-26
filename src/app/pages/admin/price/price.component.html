@@ -1,0 +1,121 @@
+<div class="surface-card shadow-2 p-4 border-round price-wrapper">
+  <div class="section">
+    <h2 class="mb-3 text-xxl font-semibold " style="color: #2196f3;">Quản lý giá vé</h2>
+    <table class="custom-table striped-table">
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Ghế thường</th>
+          <th>Ghế VIP</th>
+          <th>Ghế đôi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Thứ 2,3,4,5,6</td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[0].weekdayPrice"
+              (blur)="validateSeatPrice(0)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[1].weekdayPrice"
+              (blur)="validateSeatPrice(1)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[2].weekdayPrice"
+              (blur)="validateSeatPrice(2)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>Thứ 7, CN</td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[0].weekendPrice"
+              (blur)="validateSeatPrice(0)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[1].weekendPrice"
+              (blur)="validateSeatPrice(1)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="seatTypes[2].weekendPrice"
+              (blur)="validateSeatPrice(2)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section mt-5">
+    <h2 class="mb-3 text-xxl font-semibold"  style="color: #2196f3;">Phụ thu</h2>
+    <table class="custom-table striped-table">
+      <thead>
+        <tr>
+          <th>Loại phòng</th>
+          <th>Giá phụ thu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of roomTypes; let i = index">
+          <td>{{ room.roomType.replace("_", "") }}</td>
+          <td>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="room.surcharge"
+              (blur)="validateRoomPrice(i)"
+              (keydown)="preventMinus($event)"
+              class="input-field"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="flex justify-content-end mt-3">
+      <button
+        pButton
+        type="button"
+        label="Lưu"
+        icon="pi pi-save"
+        class="p-button-success w-full md:w-6rem p-2 align-items-center "
+        style="cursor: pointer"
+        (click)="save()"
+      ></button>
+    </div>
+  </div>
+</div>
