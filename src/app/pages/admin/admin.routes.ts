@@ -92,6 +92,15 @@ export const AdminRoute: Route[] = [
                     ),
                 title: 'Thêm phim ',
             }
+            ,
+            {
+                path: 'update-movie/:id',
+                loadChildren: () =>
+                    import('./update-movie/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Chỉnh sửa phim ',
+            }
         ],
         title: 'Trang chủ',
         canActivate: [AuthGuard],

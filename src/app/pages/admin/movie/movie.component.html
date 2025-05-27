@@ -50,10 +50,10 @@
         <td>{{ movie.endDate | date : "dd/MM/yyyy" }}</td>
         <td>
           <div class="flex justify-content-center gap-2">
-            <div class="bg-edit icon-box">
+            <div class="bg-edit icon-box" [routerLink]="['/admin/update-movie', movie.id]">
               <i class="pi pi-pen-to-square text-edit"></i>
             </div>
-            <div class="bg-delete icon-box">
+            <div class="bg-delete icon-box" (click)="confirmDelete(movie)">
               <i class="pi pi-trash text-delete"></i>
             </div>
           </div>
@@ -69,3 +69,8 @@
     (onPageChange)="onPageChange($event)"
   ></p-paginator>
 </div>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>

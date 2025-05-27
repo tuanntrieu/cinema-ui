@@ -54,6 +54,16 @@ export class MovieService {
       })
     );
   }
+  deleteMovie(id: number): Observable<any> {
+    return this.#http.delete(`${this.#url}/delete/${id}`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 
   createMovie(request: MovieRequest, file: File): Observable<any> {
     const formData = new FormData();
@@ -69,6 +79,28 @@ export class MovieService {
     formData.append('image', file);
 
     return this.#http.post(`${this.#url}/create`, formData).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  updateMovie(id: number, request: MovieRequest, file: File | null): Observable<any> {
+    const formData = new FormData();
+    Object.entries(request).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach(v => formData.append(key, v.toString()));
+      } else if (value instanceof Date) {
+        formData.append(key, value.toISOString().split('T')[0]);
+      } else {
+        formData.append(key, value.toString());
+      }
+    });
+    if (file) formData.append('image', file);
+
+    return this.#http.patch(`${this.#url}/update/${id}`, formData).pipe(
       catchError((error) => {
         if (error?.error) {
           return mapError(error.error);

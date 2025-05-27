@@ -45,12 +45,11 @@ export class ShowtimesComponent {
     this.cinemaName = localStorage.getItem("cinemaName") ?? '';
     if (id) {
       this.cinemaId = Number(id);
-
       const paginationState = this.#paginationStateService.getPaginationState(this.stateKey);
       this.pagination.page = paginationState.page ?? 0;
       this.pagination.rows = paginationState.rows ?? 4;
       this.generate7DayTabs();
-      this.tabDate = paginationState.tabId ?? this.menuItems[0].id!;
+      this.tabDate = paginationState.tabId ?? this.menuItems[0].id!;      
       this.activeItem = this.menuItems.find(item => item.id === this.tabDate) ?? this.menuItems[0];
       this.isInitialized = true;
       this.getMoviesByDate();
@@ -58,35 +57,31 @@ export class ShowtimesComponent {
   }
 
   generate7DayTabs(): void {
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const isoDate = date.toISOString().split('T')[0];
-      const label = date.toLocaleDateString('vi-VN', {
-        weekday: 'short', day: '2-digit', month: '2-digit'
-      });
-
-      this.menuItems.push({ label, id: isoDate });
-    }
+  const today = new Date();
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    const isoDate = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const label = date.toLocaleDateString('vi-VN', {
+      weekday: 'short', day: '2-digit', month: '2-digit'
+    });
+    this.menuItems.push({ label, id: isoDate });
   }
+}
 
   onActiveItemChange(item: MenuItem) {
     if (this.isInitialized) {
       this.isInitialized = false;
       return;
     }
-
     if (item?.id) {
       this.tabDate = item.id;
       this.pagination.page = 0;
-
       this.#paginationStateService.setPaginationState(this.stateKey, {
         page: 0,
         rows: this.pagination.rows,
         tabId: this.tabDate
       });
-
       this.getMoviesByDate();
     }
   }
@@ -94,13 +89,11 @@ export class ShowtimesComponent {
   onPageChange(event: any) {
     this.pagination.page = event.page;
     this.pagination.rows = event.rows;
-
     this.#paginationStateService.setPaginationState(this.stateKey, {
       page: this.pagination.page,
       rows: this.pagination.rows,
       tabId: this.tabDate
     });
-
     this.getMoviesByDate();
   }
 
@@ -114,7 +107,6 @@ export class ShowtimesComponent {
       dateSearch: new Date(this.tabDate),
       name:''
     };
-
     this.#movie.getMoviesByDate(request).subscribe({
       next: (res: any) => this.handleMovieResponse(res),
       error: (err: any) => this.#toast.error(err)
