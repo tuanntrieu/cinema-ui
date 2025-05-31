@@ -1,19 +1,19 @@
 import { RoomTypeEnum, SeatStatus, SeatType } from "../../utils/constants";
 
 export interface SeatResponse {
-    seatId: number;
-    seatName: string;
-    seatType: string;
-    seatStatus: string;
-    xcoordinate: number;
-    ycoordinate: number;
-    price: number
+  seatId: number;
+  seatName: string;
+  seatType: string;
+  seatStatus: string;
+  xcoordinate: number;
+  ycoordinate: number;
+  price: number
 }
 
 export interface UpdateSeatStatusRequest {
-    seatId: number;
-    scheduleId: number;
-    seatStatus:SeatStatus;
+  seatId: number;
+  scheduleId: number;
+  seatStatus: SeatStatus;
 }
 export interface RoomTypeResponse {
   id: number;
@@ -27,7 +27,11 @@ export interface SeatPriceResponse {
   seatType: SeatType
 }
 
-export interface UpdateSeatPriceRequest{
-    seatRequest:SeatPriceResponse[];
-    roomRequest:RoomTypeResponse[];
+export interface UpdateSeatPriceRequest {
+  seatRequest: SeatPriceResponse[];
+  roomRequest: RoomTypeResponse[];
+}
+export interface UpdateSeatTypeRequest {
+  roomId: number;
+  row: number;
 }

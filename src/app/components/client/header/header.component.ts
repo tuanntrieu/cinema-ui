@@ -22,17 +22,18 @@ import { Router } from '@angular/router';
   selector: 'app-header',
   standalone: true,
   imports: [TieredMenuModule, MenubarModule,
-     MenuModule, ImageModule, NgSelectModule,
-      CommonModule, FormsModule, DialogModule, 
-      ButtonModule],
+    MenuModule, ImageModule, NgSelectModule,
+    CommonModule, FormsModule, DialogModule,
+    ButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
 
   items: MenuItem[] = [
-    { label: 'LỊCH CHIẾU THEO RẠP', routerLink: '/showtimes' },
-    { label: 'PHIM', routerLink: '/movies' }
+    { label: 'PHIM', routerLink: '/movies' },
+    { label: 'LỊCH CHIẾU THEO RẠP', routerLink: '/showtimes' }
+
   ];
   visible = false;
   selectedId: number | undefined;

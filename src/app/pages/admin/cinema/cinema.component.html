@@ -11,25 +11,27 @@
       class="p-button-success w-full md:w-9rem p-2 align-items-center"
       style="cursor: pointer"
       [rounded]="true"
+      (click)="openCreateDialog()"
     ></button>
     <input
       pInputText
       [(ngModel)]="nameSearch"
       placeholder="Nhập tên rạp"
       class="w-full md:w-13rem"
+      (ngModelChange)="onSearchChange()"
     />
   </div>
   <p-table
     [value]="cinemas"
     class="p-datatable-sm table-cinema"
-    [tableStyle]="{ 'min-width': '100%', 'min-height': '400px' }"
+    [tableStyle]="{ 'min-width': '100%' }"
   >
     <ng-template pTemplate="header">
       <tr>
         <th>Tên rạp</th>
         <th>Đia chỉ</th>
         <th>Số phòng</th>
-        <th>Thao tác</th>
+        <th style="text-align: center">Thao tác</th>
       </tr>
     </ng-template>
 
@@ -47,14 +49,14 @@
               cinema.province
           }}
         </td>
-        <td>4</td>
+        <td>{{ cinema.sumRoom }}</td>
 
         <td>
           <div class="flex justify-content-center gap-2">
-            <div class="bg-view icon-box">
-              <i class="pi pi-eye text-view"></i>
-            </div>
-            <div class="bg-edit icon-box">
+            <div
+              class="bg-edit icon-box"
+              [routerLink]="['/admin/update-cinema', cinema.id]"
+            >
               <i class="pi pi-pen-to-square text-edit"></i>
             </div>
             <div class="bg-delete icon-box">
@@ -71,5 +73,158 @@
     [rows]="pagination.rows"
     [totalRecords]="pagination.pageCount"
     [first]="pagination.first"
+    (onPageChange)="onPageChange($event)"
   ></p-paginator>
 </div>
+<p-dialog
+  header="Thêm Rạp phim "
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '60vw', maxWidth: '800px', minWidth: '320px' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+  [closable]="false"
+>
+  <form [formGroup]="createForm">
+    <div class="p-fluid">
+      <!-- 1 cột riêng -->
+      <div class="field full-width flex flex-column">
+        <label for="name">Tên rạp</label>
+        <input
+          id="cinemaName"
+          type="text"
+          pInputText
+          formControlName="cinemaName"
+          placeholder="Nhập tên rạp"
+        />
+        <small
+          *ngIf="createForm.controls['cinemaName'].invalid && submitted"
+          class="p-error"
+        >
+          Tên rạp không được để trống
+        </small>
+      </div>
+
+      <!-- 2 ô trên 1 hàng -->
+      <div class="flex-row-wrap">
+        <div class="field half-width flex flex-column">
+          <label for="hotline">Hotline</label>
+          <input
+            id="hotline"
+            type="text"
+            pInputText
+            formControlName="hotline"
+            placeholder="Nhập số hotline"
+          />
+          <small
+            *ngIf="submitted && (createForm.controls['hotline'].errors?.['required'] || createForm.controls['hotline'].errors?.['whitespace'])"
+            class="p-error"
+          >
+            Hotline không được để trống
+          </small>
+          <small
+            *ngIf="submitted && (createForm.controls['hotline'].errors?.['invalidPhoneNumber'] )"
+            class="p-error"
+          >
+            Hotline không hợp lệ
+          </small>
+        </div>
+
+        <div class="field half-width flex flex-column">
+          <label for="detailAddress">Địa chỉ chi tiết</label>
+          <input
+            id="detailAddress"
+            type="text"
+            pInputText
+            formControlName="detailAddress"
+            placeholder="Nhập địa chỉ chi tiết"
+          />
+          <small
+            *ngIf="createForm.controls['detailAddress'].invalid && submitted"
+            class="p-error"
+          >
+            Địa chỉ chi tiết không được để trống
+          </small>
+        </div>
+      </div>
+
+      <!-- 3 ô địa chỉ tỉnh/quận/xã trên 1 hàng -->
+      <div class="flex-row-wrap">
+        <div class="field third-width flex flex-column">
+          <label for="province">Tỉnh/Thành</label>
+          <ng-select
+            [items]="provinces"
+            bindLabel="name"
+            bindValue="name"
+            placeholder="Chọn tỉnh/thành"
+            formControlName="province"
+            [searchable]="true"
+            (ngModelChange)="onProvinceSelect($event)"
+          >
+          </ng-select>
+          <small
+            *ngIf="createForm.controls['province'].invalid && submitted"
+            class="p-error"
+          >
+            Vui lòng chọn tỉnh/thành
+          </small>
+        </div>
+
+        <div class="field third-width flex flex-column">
+          <label for="district">Quận/Huyện</label>
+          <ng-select
+            [items]="districts"
+            bindLabel="name"
+            bindValue="name"
+            placeholder="Chọn quận/huyện"
+            formControlName="district"
+            [searchable]="true"
+            (ngModelChange)="onDistrictSelect($event)"
+          >
+          </ng-select>
+          <small
+            *ngIf="createForm.controls['district'].invalid && submitted"
+            class="p-error"
+          >
+            Vui lòng chọn quận/huyện
+          </small>
+        </div>
+
+        <div class="field third-width flex flex-column">
+          <label for="ward">Phường/Xã</label>
+          <ng-select
+            [items]="wards"
+            bindLabel="name"
+            bindValue="name"
+            placeholder="Chọn phường/xã"
+            formControlName="ward"
+            [searchable]="true"
+          >
+          </ng-select>
+          <small
+            *ngIf="createForm.controls['ward'].invalid && submitted"
+            class="p-error"
+          >
+            Vui lòng chọn phường/xã
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-content-end mt-3 gap-2">
+      <button
+        type="button"
+        pButton
+        label="Hủy"
+        class="p-button-text"
+        (click)="visible = false; createForm.reset(); submitted = false"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        label="Lưu"
+        class="p-button-primary"
+        (click)="onCreateCinema()"
+      ></button>
+    </div>
+  </form>
+</p-dialog>

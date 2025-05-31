@@ -1,0 +1,329 @@
+<div
+  class="surface-card shadow-2 p-4 border-round cinema-wrapper"
+  *ngIf="cinema"
+>
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý rạp : {{ cinema.cinemaName }}
+  </h2>
+  <div class="room-infor">
+    <form [formGroup]="updateCinemaForm">
+      <div class="p-fluid">
+        <div class="flex-row-wrap">
+          <div class="field flex third-width flex-column">
+            <label for="name">Tên rạp</label>
+            <input
+              id="cinemaName"
+              type="text"
+              pInputText
+              formControlName="cinemaName"
+              placeholder="Nhập tên rạp"
+            />
+            <small
+              *ngIf="
+                updateCinemaForm.controls['cinemaName'].invalid && updateSubmit
+              "
+              class="p-error"
+            >
+              Tên rạp không được để trống
+            </small>
+          </div>
+
+          <div class="field third-width flex flex-column">
+            <label for="hotline">Hotline</label>
+            <input
+              id="hotline"
+              type="text"
+              pInputText
+              formControlName="hotline"
+              placeholder="Nhập số hotline"
+            />
+            <small
+              *ngIf="updateSubmit && (updateCinemaForm.controls['hotline'].errors?.['required'] || updateCinemaForm.controls['hotline'].errors?.['whitespace'])"
+              class="p-error"
+            >
+              Hotline không được để trống
+            </small>
+            <small
+              *ngIf="updateSubmit && (updateCinemaForm.controls['hotline'].errors?.['invalidPhoneNumber'] )"
+              class="p-error"
+            >
+              Hotline không hợp lệ
+            </small>
+          </div>
+
+          <div class="field third-width flex flex-column">
+            <label for="detailAddress">Địa chỉ chi tiết</label>
+            <input
+              id="detailAddress"
+              type="text"
+              pInputText
+              formControlName="detailAddress"
+              placeholder="Nhập địa chỉ chi tiết"
+            />
+            <small
+              *ngIf="
+                updateCinemaForm.controls['detailAddress'].invalid &&
+                updateSubmit
+              "
+              class="p-error"
+            >
+              Địa chỉ chi tiết không được để trống
+            </small>
+          </div>
+        </div>
+
+        <!-- 3 ô địa chỉ tỉnh/quận/xã trên 1 hàng -->
+        <div class="flex-row-wrap">
+          <div class="field third-width flex flex-column">
+            <label for="province">Tỉnh/Thành</label>
+            <ng-select
+              [items]="provinces"
+              bindLabel="name"
+              bindValue="name"
+              placeholder="Chọn tỉnh/thành"
+              formControlName="province"
+              [searchable]="true"
+              (ngModelChange)="onProvinceSelect($event)"
+            >
+            </ng-select>
+            <small
+              *ngIf="
+                updateCinemaForm.controls['province'].invalid && updateSubmit
+              "
+              class="p-error"
+            >
+              Vui lòng chọn tỉnh/thành
+            </small>
+          </div>
+
+          <div class="field third-width flex flex-column">
+            <label for="district">Quận/Huyện</label>
+            <ng-select
+              [items]="districts"
+              bindLabel="name"
+              bindValue="name"
+              placeholder="Chọn quận/huyện"
+              formControlName="district"
+              [searchable]="true"
+              (ngModelChange)="onDistrictSelect($event)"
+            >
+            </ng-select>
+            <small
+              *ngIf="
+                updateCinemaForm.controls['district'].invalid && updateSubmit
+              "
+              class="p-error"
+            >
+              Vui lòng chọn quận/huyện
+            </small>
+          </div>
+
+          <div class="field third-width flex flex-column">
+            <label for="ward">Phường/Xã</label>
+            <ng-select
+              [items]="wards"
+              bindLabel="name"
+              bindValue="name"
+              placeholder="Chọn phường/xã"
+              formControlName="ward"
+              [searchable]="true"
+            >
+            </ng-select>
+            <small
+              *ngIf="updateCinemaForm.controls['ward'].invalid && updateSubmit"
+              class="p-error"
+            >
+              Vui lòng chọn phường/xã
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-content-end mt-3 gap-2">
+        <button
+          pButton
+          type="button"
+          label="Lưu"
+          icon="pi pi-save"
+          class="p-button-success  md:w-6rem p-2 align-items-center"
+          style="cursor: pointer"
+          type="submit"
+          (click)="onUpdateCinema()"
+        ></button>
+      </div>
+    </form>
+  </div>
+  <hr style="border-top: 1px dotted #5c5959; width: 100%; margin: 20px" />
+  <div class="list-room">
+    <h3
+      class="mb-3 font-semibold"
+      style="color: #2196f3 !important; text-align: center"
+    >
+      Danh sách phòng chiếu
+    </h3>
+    <div class="flex justify-content-start mt-3 gap-2 mb-2">
+      <button
+        pButton
+        type="button"
+        label="Thêm phòng "
+        icon="pi pi-plus"
+        class="p-button-success  md:w-9rem p-2 align-items-center"
+        style="cursor: pointer"
+        [rounded]="true"
+        (click)="onOpenCreate()"
+      ></button>
+    </div>
+    <p-table
+      [value]="rooms"
+      class="mb-4 mt-2"
+      styleClass="p-datatable-striped table-type"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>TÊN PHÒNG</th>
+          <th>LOẠI PHÒNG</th>
+          <th>SỐ GHẾ</th>
+          <th style="text-align: center">THAO TÁC</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-room>
+        <tr>
+          <td>{{ room.name }}</td>
+          <td>{{ getRoomType(room.roomType) }}</td>
+          <td>{{ room.sumSeat }}</td>
+          <td>
+            <div class="flex justify-content-center gap-2">
+              <div class="bg-edit icon-box" [routerLink]="['/admin/manage-room', room.id]">
+                <i class="pi pi-pen-to-square text-edit"></i>
+              </div>
+              <div class="bg-delete icon-box" (click)="confirmDelete(room)">
+                <i class="pi pi-trash text-delete"></i>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-paginator
+      *ngIf="rooms.length != 0"
+      [rows]="pagination.rows"
+      [totalRecords]="pagination.pageCount"
+      [first]="pagination.first"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
+</div>
+<p-dialog
+  header="Thêm Phòng Chiếu"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '60vw', maxWidth: '800px', minWidth: '320px' }"
+  [contentStyle]="{ padding: '1.5rem' }"
+  [closable]="false"
+>
+  <form [formGroup]="creatRoomForm">
+    <div class="p-fluid">
+      <div class="flex-row-wrap">
+        <div class="field half-width flex flex-column">
+          <label for="name">Tên phòng </label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            placeholder="Nhập tên phòng "
+          />
+          <small
+            *ngIf="createSubmit && (creatRoomForm.controls['name'].errors?.['required'] || creatRoomForm.controls['name'].errors?.['whitespace'])"
+            class="p-error"
+          >
+            Tên không được để trống
+          </small>
+        </div>
+
+        <div class="field half-width flex flex-column">
+          <label for="roomTypeEnum">Loại phòng</label>
+          <ng-select
+            [items]="roomType"
+            bindLabel="label"
+            bindValue="value"
+            placeholder="Chọn loại phòng "
+            formControlName="roomTypeEnum"
+            [searchable]="true"
+           
+          >
+          </ng-select>
+          <small
+            *ngIf="
+              creatRoomForm.controls['roomTypeEnum'].invalid && createSubmit
+            "
+            class="p-error"
+          >
+            Loại phòng không được để trống!
+          </small>
+        </div>
+      </div>
+      <div class="flex-row-wrap">
+        <div class="field half-width flex flex-column">
+          <label for="numberOfRow">Số hàng ghế</label>
+          <p-inputNumber
+            formControlName="numberOfRow"
+            inputId="numberOfRow"
+            class="w-full"
+            [min]="6"
+            [max]="20"
+          ></p-inputNumber>
+          <small
+            *ngIf="
+              creatRoomForm.controls['numberOfRow'].invalid && createSubmit
+            "
+            class="p-error"
+          >
+            Vui lòng nhập số hàng ghế!
+          </small>
+        </div>
+
+        <div class="field half-width flex flex-column">
+          <label for="numberOfColumn">Số ghế mỗi hàng </label>
+          <p-inputNumber
+            formControlName="numberOfColumn"
+            inputId="numberOfColumn"
+            class="w-full"
+            [min]="6"
+            [max]="20"
+          ></p-inputNumber>
+          <small
+            *ngIf="
+              creatRoomForm.controls['numberOfColumn'].invalid && createSubmit
+            "
+            class="p-error"
+          >
+            Vui lòng nhập số ghế mỗi hàng!
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-content-end mt-3 gap-2">
+      <button
+        type="button"
+        pButton
+        label="Hủy"
+        class="p-button-text"
+        (click)="visible = false; creatRoomForm.reset(); createSubmit = false"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        label="Lưu"
+        class="p-button-primary"
+        (click)="onCreateRoom()"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>

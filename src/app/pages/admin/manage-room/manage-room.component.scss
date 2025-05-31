@@ -1,0 +1,159 @@
+::ng-deep .ng-select-container {
+    width: 200px !important;
+}
+
+::ng-deep .ng-dropdown-panel {
+    width: 200px !important;
+}
+
+.place-order-wrapper {
+    max-width: 80vw;
+    padding: 2rem;
+}
+
+
+.movie-warning:hover {
+    background-color: #ffe8a1;
+    color: #b30000;
+    cursor: pointer;
+}
+
+
+
+.note-seat {
+    width: 35px;
+    
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    width: 100%;
+    display: flex;
+}
+
+.seat-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 5px;
+    width: 33%;
+}
+
+.seat-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 2px solid #999;
+}
+
+.seat-container {
+  
+    padding-top: 30px;
+}
+
+.seat-layout {
+    text-align: center;
+
+    .screen {
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 50px 50px 0 0;
+    }
+
+    .seats {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background: #e5e3e3;
+        max-height: 500px;
+        overflow: auto;
+        border-radius: 0 0 5px 5px;
+    }
+
+    .seat-row {
+        display: flex;
+    }
+
+    .seat {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-weight: bold;
+        color: #a29ba3;
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        margin: 2px;
+    }
+
+    .seat:hover {
+        transform: scale(1.1);
+    }
+
+    .available {
+        color: #9B9999;
+    }
+
+    .empty-seat {
+        background: transparent;
+        border: none;
+    }
+
+}
+
+
+/* Nút kiểu outline chung */
+.outline-button.p-button {
+  background-color: transparent !important;
+  box-shadow: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Outline màu vàng cho warning */
+.p-button-warning.outline-button {
+  color: #f59e0b; /* màu vàng (warning) */
+  border: 2px solid #f59e0b !important;
+}
+
+/* Outline màu xanh cho success */
+.p-button-success.outline-button {
+  color: #10b981; /* màu xanh (success) */
+  border: 2px solid #10b981 !important;
+}
+
+/* Đảm bảo icon cũng lấy đúng màu */
+.outline-button.p-button .pi {
+  color: inherit;
+}
+
+
+::ng-deep .p-hidden-accessible{
+display: none;
+}
+
+.seat-row-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.row-radio {
+  width: 100px; /* đủ để hiển thị radio và nhãn */
+  text-align: center;
+  padding-left: 10px;
+}
+
+.seat-row {
+  display: flex;
+  gap: 10px;
+}

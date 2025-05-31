@@ -151,10 +151,14 @@
                     [src]="product.image"
                     alt="combo image"
                     class="w-16 h-auto mx-auto"
+                    style="width: 70px; height: 70px"
                   />
                 </td>
                 <td>{{ product.name }}</td>
-                <td>{{ product.description }}( {{product.price|currency:'VND'}})</td>
+                <td>
+                  {{ product.description }}(
+                  {{ product.price | currency : "VND" }})
+                </td>
                 <td class="combo-ip">
                   <p-inputNumber
                     [min]="0"
@@ -164,7 +168,7 @@
                     decrementButtonIcon="pi pi-minus"
                     inputStyleClass="text-center p-0"
                     class="combo-input"
-                    (onInput)="onQuantityChange($event,product)"
+                    (onInput)="onQuantityChange($event, product)"
                   ></p-inputNumber>
                 </td>
               </tr>

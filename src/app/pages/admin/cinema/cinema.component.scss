@@ -53,3 +53,33 @@
     vertical-align: middle !important;
     padding: 0.5rem 1rem;
 }
+
+.flex-row-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* khoảng cách giữa các ô */
+}
+
+.half-width {
+  flex: 1 1 48%; /* chiếm khoảng 48% chiều ngang */
+  min-width: 200px; /* tối thiểu 200px */
+}
+
+.third-width {
+  flex: 1 1 30%; /* chiếm khoảng 30% chiều ngang */
+  min-width: 150px;
+}
+
+.full-width {
+  width: 100%;
+}
+.p-error{
+    margin-top: 15px;
+}
+/* Responsive: màn hình nhỏ thì các ô rộng 100% (xếp dọc) */
+@media (max-width: 600px) {
+  .half-width,
+  .third-width {
+    flex: 1 1 100%;
+  }
+}

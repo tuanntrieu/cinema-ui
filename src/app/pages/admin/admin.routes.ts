@@ -100,6 +100,23 @@ export const AdminRoute: Route[] = [
                         (m) => m.featureModuleRoutes
                     ),
                 title: 'Chỉnh sửa phim ',
+            },
+            {
+                path: 'update-cinema/:id',
+                loadChildren: () =>
+                    import('./update-cinema/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Chỉnh sửa phim ',
+            }
+            ,
+            {
+                path: 'manage-room/:id',
+                loadChildren: () =>
+                    import('./manage-room/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lí phòng chiếu  ',
             }
         ],
         title: 'Trang chủ',

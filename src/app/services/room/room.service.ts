@@ -23,7 +23,7 @@ export class RoomService {
       })
     );
   }
-  updateRoomType(id: number, roomType: RoomTypeEnum) : Observable<any>{
+  updateRoomType(id: number, roomType: RoomTypeEnum): Observable<any> {
     const params = new HttpParams()
       .set('roomType', roomType)
     return this.#http.patch(`${this.#url}/update-room-type/${id}`, params).pipe(
@@ -65,7 +65,7 @@ export class RoomService {
       })
     );
   }
-  getAllRoomType():Observable<any> {
+  getAllRoomType(): Observable<any> {
     return this.#http.get(`${this.#url}/get-all-room-types`).pipe(
       catchError((error) => {
         if (error?.error) {
@@ -75,5 +75,26 @@ export class RoomService {
       })
     );
   }
+  getRoomDetail(id: number): Observable<any> {
+    return this.#http.get(`${this.#url}/${id}`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  validateRoom(id: number): Observable<any> {
+    return this.#http.get(`${this.#url}/validate/${id}`).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
 
 }

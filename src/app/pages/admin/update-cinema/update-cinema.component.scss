@@ -1,0 +1,70 @@
+.flex-row-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    /* khoảng cách giữa các ô */
+}
+
+.half-width {
+    flex: 1 1 48%;
+    /* chiếm khoảng 48% chiều ngang */
+    min-width: 200px;
+    /* tối thiểu 200px */
+}
+
+.third-width {
+    flex: 1 1 30%;
+    /* chiếm khoảng 30% chiều ngang */
+    min-width: 150px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.p-error {
+    margin-top: 15px;
+}
+
+.icon-box {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.bg-edit {
+    background-color: #ffe4cf;
+}
+
+.text-edit {
+    color: #ff7f00 !important;
+    font-size: 16px;
+    font-weight: 700 !important;
+}
+
+.bg-delete {
+    background-color: #edafaf;
+
+}
+
+.text-delete {
+    color: #ef5f5f;
+    font-size: 16px;
+    font-weight: 700 !important;
+}
+
+::ng-deep .ng-select-container{
+    height: 45px !important;
+}
+
+@media (max-width: 600px) {
+
+    .half-width,
+    .third-width {
+        flex: 1 1 100%;
+    }
+}

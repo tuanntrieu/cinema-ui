@@ -175,7 +175,7 @@ export class PlaceOrderComponent implements OnDestroy {
   }
 
   getUrlImage(seat: any): string {
-    const seatType = seat?.seatType || 'default';
+    const seatType = seat?.seatType || 'standard';
     const seatStatus = seat?.seatStatus || 'available';
     return `assets/images/seats/${seatType}_${seatStatus}.png`;
   }
@@ -340,9 +340,6 @@ export class PlaceOrderComponent implements OnDestroy {
     }
   }
   comboRq: ComboOrderRequest[] = [];
-
-
-
   onQuantityChange(event: any, product: ComboResponse) {
     this.totalPrice -= this.totalCombo;
     const existingCombo = this.comboRq.find(combo => combo.comboId === product.id);
@@ -361,8 +358,6 @@ export class PlaceOrderComponent implements OnDestroy {
       this.totalPrice += this.totalCombo
     }
   }
-
-
 }
 interface PageEvent {
   first: number;

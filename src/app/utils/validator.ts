@@ -2,11 +2,13 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from
 import { Observable, of } from "rxjs";
 
 export function noWhiteSpace(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-        const isWhitespace = (control.value || '').trim().length === 0;
-        return !isWhitespace ? null : { whitespace: true };
-    }
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = (control.value ?? '').toString().trim();
+    const isWhitespace = value.length === 0;
+    return !isWhitespace ? null : { whitespace: true };
+  };
 }
+
 export function isEmail(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

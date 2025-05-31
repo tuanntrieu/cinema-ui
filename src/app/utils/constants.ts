@@ -12,6 +12,7 @@ export enum RoomTypeEnum {
     _4D = '4D',
     _IMAX = 'IMAX',
 }
+
 export enum SeatType {
     STANDARD = "Ghế thưởng",
     VIP = "Ghế vip",

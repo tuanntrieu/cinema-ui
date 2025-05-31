@@ -8,7 +8,6 @@ export interface RoomRequest {
     cinemaId: number;
     roomTypeEnum: RoomTypeEnum;
 }
-
 export interface UpdateRoomSurchargeRequest {
     roomType: RoomTypeEnum;
     surcharge: number;
@@ -28,5 +27,18 @@ export interface RoomOrderResponse {
     date: Date;
     time: Date;
     ageLimit: number;
+    seats: SeatResponse[];
+}
+
+export interface RoomResponse {
+    id: number;
+    name: string;
+    roomType: RoomTypeEnum;
+    sumSeat: number;
+}
+export interface RoomDetailResponse {
+    id: number;
+    name: string;
+    roomType: RoomTypeEnum;
     seats: SeatResponse[];
 }

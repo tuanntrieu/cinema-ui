@@ -3,7 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { baseUrl } from '../../utils/constants';
 import { catchError, Observable, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
-import { CinemaSearchRequest } from '../../models/cinema';
+import { CinemaGetRoomRequest, CinemaRequest, CinemaSearchRequest } from '../../models/cinema';
+import { PageRequest } from '../../models/page';
 
 
 @Injectable({
@@ -50,6 +51,48 @@ export class CinemaService {
     const params = new HttpParams()
       .set('province', province)
     return this.#http.get<any>(`${this.#url}load-by-province`, { params }).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  createCinema(rq: CinemaRequest): Observable<any> {
+    return this.#http.post(`${this.#url}create`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+
+    );
+  }
+  updateCinema(id:number,rq:CinemaRequest): Observable<any> {
+    return this.#http.patch(`${this.#url}update/${id}`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+
+    );
+  }
+  getRoomByCinema( rq: CinemaGetRoomRequest): Observable<any> {
+    return this.#http.post(`${this.#url}get-room`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  getCinemaDetail(id: number): Observable<any> {
+    return this.#http.get(`${this.#url}${id}`).pipe(
       catchError((error) => {
         if (error?.error) {
           return mapError(error.error);

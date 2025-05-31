@@ -1,0 +1,208 @@
+<div class="surface-card shadow-2 p-4 border-round cinema-wrapper" *ngIf="room">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý phòng chiếu: {{ room.name }}
+  </h2>
+  <small *ngIf="!enable" style="color: red">
+    Phòng đang có lịch chiếu sau đó, không thể thực hiện chỉnh sửa!</small
+  >
+  <div class="mt-3">
+    <div class="field flex flex-column">
+      <label for="roomTypeEnum" style="font-weight: 500">Loại phòng</label>
+      <ng-select
+        [items]="roomType"
+        bindLabel="label"
+        bindValue="value"
+        placeholder="Chọn loại phòng "
+        [(ngModel)]="type"
+        [searchable]="true"
+        [disabled]="!enable"
+        (change)="onSelectChange()"
+      >
+      </ng-select>
+    </div>
+  </div>
+  <h2
+    class="mb-3 text-xxl font-semibold"
+    style="
+      color: #2196f3 !important;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      border: 1px solid #e5e3e3;
+      padding: 10px;
+      border-radius: 5px;
+    "
+  >
+    Sơ đồ ghế
+  </h2>
+
+  <div class="seat-container grid">
+    <div class="col-12 md:col-7">
+      <div class="seat-layout">
+        <div class="screen">
+          <img
+            src="assets/images/seats/screen.png"
+            width="600"
+            height="100"
+            loading="lazy"
+            alt="Screen"
+            priority
+          />
+        </div>
+        <hr style="border-top: 2px solid #5c5959; width: 100%; margin: 0" />
+        <div class="seats">
+          <div
+            *ngFor="let row of seatGrid; let rowIndex = index"
+            class="seat-row-wrapper"
+          >
+            <div class="seat-row">
+              <div *ngFor="let seat of row" class="seat-cell">
+                <div
+                  class="seat flex flex-column"
+                  [ngClass]="getSeatClass(seat)"
+                  [title]="seat?.seatName"
+                  (click)="onSeatClick(seat)"
+                >
+                  <img [src]="getUrlImage(seat)" class="note-seat" />
+                  {{ seat?.seatName || "" }}
+                </div>
+              </div>
+            </div>
+            <div class="row-radio">
+              <p-radioButton
+                name="rowSelection"
+                [value]="rowIndex + 1"
+                [(ngModel)]="selectedRowIndex"
+                inputId="row{{ rowIndex }}"
+              ></p-radioButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="movie-info col-12 md:col-5">
+      <div class="grid align-items-start">
+        <div class="col-12 pt-3">
+          <hr style="border-top: 1px solid #ccc; width: 100%" />
+          <table>
+            <tr>
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/STANDARD_AVAILABLE.png"
+                  class="note-seat"
+                />
+                Ghế thường
+              </td>
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/STANDARD_SELECTED.png"
+                  class="note-seat"
+                />
+                Ghế được chọn
+              </td>
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/STANDARD_MAINTENANCE.png"
+                  class="note-seat"
+                />
+                Ghế bảo trì
+              </td>
+            </tr>
+          </table>
+          <hr style="border-top: 1px solid #ccc; width: 100%" />
+          <table>
+            <tr>
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/STANDARD_AVAILABLE.png"
+                  alt="Ghế thường"
+                  class="note-seat"
+                />
+                Ghế thường
+              </td>
+              <!-- Ghế VIP -->
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/VIP_AVAILABLE.png"
+                  alt="Ghế VIP"
+                  class="note-seat"
+                />
+                Ghế VIP
+              </td>
+              <td class="seat-item">
+                <img
+                  src="assets/images/seats/COUPLE_AVAILABLE.png"
+                  alt="Ghế thường"
+                  class="note-seat"
+                />
+                Ghế đôi
+              </td>
+            </tr>
+          </table>
+          <hr style="border-top: 1px solid #ccc; width: 100%" />
+          <table class="w-full pl-3 mt-2 select-detail">
+            <tbody>
+              <tr>
+                <td class="py-2 pr-3" style="width: 250px">
+                  <i class="pi pi-server mr-2"></i>Ghế đang chọn :
+                </td>
+                <td class="flex align-items-center">
+                  {{ nameSelected.join(", ") }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-3 flex flex-wrap gap-3 pl-3">
+            <button
+              pButton
+              type="button"
+              label="Bảo trì"
+              icon="pi pi-wrench"
+              class="p-button-warning outline-button"
+              [disabled]="!nameSelected.length || !enable"
+              (click)="setMaintenance()"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              label="Hết bảo trì"
+              icon="pi pi-check"
+              class="p-button-success outline-button"
+              [disabled]="!nameSelected.length || !enable"
+              (click)="unMaintenance()"
+            ></button>
+          </div>
+          <table class="w-full pl-3 mt-2 select-detail mt-2">
+            <tbody>
+              <tr>
+                <td class="py-2 pr-3" style="width: 250px; align-items: center">
+                  <i class="pi pi-equals mr-3"></i>Hàng đang chọn :
+                </td>
+                <td class="flex align-items-center">
+                  {{ selectedRowIndex }}
+                  <span *ngIf="selectedRowIndex" style="cursor: pointer"
+                    ><i
+                      class="pi pi-eraser pl-4 flex align-items-center"
+                      (click)="onClearRow()"
+                    ></i
+                  ></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-3 flex flex-wrap gap-3 pl-3">
+            <p-dropdown
+              [options]="seatTypeOptions"
+              [(ngModel)]="selectedSeatType"
+              placeholder="Thay đổi loại ghế"
+              optionLabel="label"
+              [disabled]="!selectedRowIndex || !enable"
+              styleClass="w-full md:w-20rem"
+              (onChange)="onSeatTypeChange($event)"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
