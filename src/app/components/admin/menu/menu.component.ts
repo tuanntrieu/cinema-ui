@@ -70,6 +70,12 @@ export class MenuComponent implements OnInit {
             icon: 'pi pi-fw pi-turkish-lira',
             routerLink: '/admin/combo'
           }
+          ,
+          {
+            label: 'Khách hàng  ',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/admin/customer'
+          }
         ]
       },
       {

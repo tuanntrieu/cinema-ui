@@ -103,7 +103,6 @@ export class ManageRoomComponent {
               this.#toast.success("Cập nhật thành công!");
               this.initData();
               this.selectedSeatType=null;
-
             } else {
               this.#toast.error(res.message);
             }

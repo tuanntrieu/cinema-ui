@@ -1,0 +1,102 @@
+/* Đặt chiều cao cho ng-select */
+::ng-deep .ng-select-container {
+  height: 44px !important;
+}
+
+/* Header phòng màu dịu, light blue */
+.room-table ::ng-deep .p-datatable-thead>tr.bg-lightblue>th {
+  background-color: #dbeafe !important;
+  /* Tailwind blue-100 */
+  color: #1e40af;
+  /* Tailwind blue-900 */
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Header lịch chiếu màu xanh nhẹ */
+.schedule-table ::ng-deep .p-datatable-thead>tr.schedule-header>th {
+  background-color: #22c55e !important;
+  /* Tailwind green-500 */
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* Khoảng cách cho nút thêm lịch chiếu */
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Màu chữ cho giờ chiếu */
+.text-primary {
+  color: #73bd8e;
+  /* Tailwind green-500 */
+}
+
+/* Chiều cao hàng lịch chiếu nhỏ gọn */
+.schedule-table ::ng-deep .p-datatable-tbody>tr>td {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/* Tối ưu căn chỉnh */
+.schedule-time-cell {
+  font-weight: 600;
+}
+
+.schedule-movie-cell {
+  padding-left: 0.5rem;
+}
+
+.schedule-action-cell {
+  padding-right: 0.5rem;
+}
+
+/* Giúp nút thêm nhỏ, bo góc đẹp */
+.p-button-sm.p-button-rounded {
+  border-radius: 50px;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}
+
+/* --- MÀU NỀN XEN KẼ VÀ VIỀN CHO TỪNG PHÒNG --- */
+.room-schedule-container:nth-child(odd) {
+  background-color: #ecfdf5;
+  /* Tailwind green-50 */
+  border: 1.5px solid #22c55e;
+  /* Tailwind green-500 viền đậm */
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15);
+}
+
+.room-schedule-container:nth-child(even) {
+  background-color: #ffffff;
+  border: 1.5px solid #86efac;
+  /* Tailwind green-300 viền nhẹ */
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(134, 239, 172, 0.1);
+}
+
+/* Khoảng cách giữa các bảng phòng và lịch chiếu */
+.room-table,
+.schedule-table {
+  margin-bottom: 1rem;
+}
+
+::ng-deep .p-hidden-accessible {
+  display: none;
+}
+
+.half-width {
+  flex: 1 1 48%;
+  min-width: 200px;
+ 
+}

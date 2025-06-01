@@ -1,5 +1,5 @@
 export interface ScheduleRequest {
-    schedule: Date;
+    scheduleTime: Date;
     movieId: number;
     roomId: number;
 }
@@ -9,7 +9,7 @@ export interface ScheduleSearchByCinemaRequest {
 }
 export interface ScheduleSearchByRoomRequest {
     date: Date;
-    movieId: number;
+    movieId: number | null;
     roomId: number;
 }
 
@@ -38,6 +38,7 @@ export interface ScheduleForCinemaResponse {
 }
 
 export interface ScheduleForRoomResponse {
+    id:number;
     startTime: Date;
     endTime: Date;
     movieName: string;

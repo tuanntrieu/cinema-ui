@@ -22,7 +22,7 @@
 
 .note-seat {
     width: 35px;
-    
+
 }
 
 table {
@@ -50,7 +50,7 @@ tr {
 }
 
 .seat-container {
-  
+
     padding-top: 30px;
 }
 
@@ -103,6 +103,10 @@ tr {
         color: #9B9999;
     }
 
+    .maintenance {
+        color: #FA5252;
+    }
+
     .empty-seat {
         background: transparent;
         border: none;
@@ -113,47 +117,50 @@ tr {
 
 /* Nút kiểu outline chung */
 .outline-button.p-button {
-  background-color: transparent !important;
-  box-shadow: none;
-  color: inherit;
-  cursor: pointer;
+    background-color: transparent !important;
+    box-shadow: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 /* Outline màu vàng cho warning */
 .p-button-warning.outline-button {
-  color: #f59e0b; /* màu vàng (warning) */
-  border: 2px solid #f59e0b !important;
+    color: #f59e0b;
+    /* màu vàng (warning) */
+    border: 2px solid #f59e0b !important;
 }
 
 /* Outline màu xanh cho success */
 .p-button-success.outline-button {
-  color: #10b981; /* màu xanh (success) */
-  border: 2px solid #10b981 !important;
+    color: #10b981;
+    /* màu xanh (success) */
+    border: 2px solid #10b981 !important;
 }
 
 /* Đảm bảo icon cũng lấy đúng màu */
 .outline-button.p-button .pi {
-  color: inherit;
+    color: inherit;
 }
 
 
-::ng-deep .p-hidden-accessible{
-display: none;
+::ng-deep .p-hidden-accessible {
+    display: none;
 }
 
 .seat-row-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .row-radio {
-  width: 100px; /* đủ để hiển thị radio và nhãn */
-  text-align: center;
-  padding-left: 10px;
+    width: 100px;
+    /* đủ để hiển thị radio và nhãn */
+    text-align: center;
+    padding-left: 10px;
 }
 
 .seat-row {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
 }

@@ -24,7 +24,7 @@ export class ScheduleService {
     );
   }
   deleteSchedule(id: number): Observable<any> {
-    return this.#http.delete(`${this.#url}/delete/${{ id }}`).pipe(
+    return this.#http.delete(`${this.#url}/delete/${id}`).pipe(
       catchError((error) => {
         if (error?.error) {
           return mapError(error.error);

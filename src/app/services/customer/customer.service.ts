@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { baseUrl } from '../../utils/constants';
-import { Customer, CustomerRequest } from '../../models/customer';
+import { Customer, CustomerRequest, CustomerSearchRequest } from '../../models/customer';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
 import { jwtDecode } from 'jwt-decode';
@@ -72,6 +72,35 @@ export class CustomerService {
   getCurrentUser(): string | null {
     return this.extractUsername();
   }
+  getCustomers(rq: CustomerSearchRequest): Observable<any> {
+    return this.#http.post<any>(`${this.#url}/get-all`, rq).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  lockAccount(id: number): Observable<any> {
+    return this.#http.patch<any>(`${this.#url}/lock/${id}`, null).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+  unLoockAccount(id: number): Observable<any> {
+    return this.#http.patch<any>(`${this.#url}/un-lock/${id}`, null).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 
- 
 }

@@ -109,6 +109,20 @@ export class MovieService {
       })
     );
   }
+  getMovieSchedule(date: Date): Observable<any> {
+    const formattedDate = date.toISOString().split('T')[0];
+    return this.#http.get(`${this.#url}/schedule`, {
+      params: { date: formattedDate },
+    }).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
 
 
 }

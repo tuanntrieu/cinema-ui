@@ -1,0 +1,62 @@
+<div class="surface-card shadow-2 p-4 border-round customer-wrapper">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý khách hàng
+  </h2>
+  <div class="flex flex-column">
+    <div class="flex flex-column md:flex-row gap-3 mb-3 flex-wrap">
+      <input
+        pInputText
+        [(ngModel)]="nameSearch"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Nhập khách hàng "
+        class="w-13rem"
+      />
+    </div>
+    <p-table [value]="customers" styleClass="p-datatable-striped table-type">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Họ tên</th>
+          <th>Giới tính</th>
+          <th>Số điện thoại</th>
+          <th>Email</th>
+          <th>Ngày tạo tài khoản</th>
+          <th>Số vẽ đã đặt</th>
+          <th class="flex justify-content-center">Thao tác</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.gender || "Đang cập nhật" }}</td>
+          <td>{{ item.phone || "Đang cập nhật" }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.createdAt | date : "HH:mm dd-MM-yyyy" }}</td>
+          <td style="text-align: center;">{{ item.countTickets }}</td>
+          <td>
+            <div class="flex justify-content-center gap-4">
+              <div class="bg-edit icon-box" *ngIf="item.isLocked" (click)="onConfrimUnLock(item)">
+                <i class="pi pi-lock text-edit"></i>
+              </div>
+              <div class="bg-delete icon-box" *ngIf="!item.isLocked" (click)="onConfrimLock(item)">
+                <i class="pi pi-lock-open text-delete"></i>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      *ngIf="customers.length != 0"
+      [rows]="pagination.rows"
+      [totalRecords]="pagination.pageCount"
+      [first]="pagination.first"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
+</div>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>

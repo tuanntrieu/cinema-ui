@@ -1,103 +1,198 @@
 <div class="p-4 surface-card shadow-2 border-round">
+  <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+    Quản lý lịch chiếu
+  </h2>
   <!-- Bộ lọc -->
   <div
     class="flex flex-wrap gap-3 align-items-center justify-content-between mb-4"
   >
     <div class="flex gap-3 align-items-center">
-      <p-dropdown
-        placeholder="Rạp"
-        [options]="cinemas"
-        optionLabel="name"
-        class="w-12rem"
-      >
-      </p-dropdown>
-
+      <ng-select
+        [items]="cinemas"
+        bindLabel="name"
+        bindValue="id"
+        groupBy="province"
+        class="w-14rem"
+        [(ngModel)]="cinemaId"
+        placeholder="Chọn rạp chiếu"
+        (change)="onCinemaIdChanged($event)"
+        [clearable]="false"
+      ></ng-select>
 
       <p-calendar
         [(ngModel)]="selectedDate"
+        [view]="'date'"
         placeholder="Ngày chiếu"
-        dateFormat="yy-mm-dd"
-        class="w-12rem"
-      >
-      </p-calendar>
-    </div>
-
-    <button
-      pButton
-      type="button"
-      label="Chấp nhận"
-      class="p-button-primary"
-    ></button>
-  </div>
-
-  <!-- Bảng thông tin phòng -->
-  <p-table [value]="rooms" class="mb-4">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>PHÒNG</th>
-        <th>LOẠI PHÒNG</th>
-        <th>GHẾ</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-room>
-      <tr>
-        <td>{{ room.name }}</td>
-        <td>{{ room.type }}</td>
-        <td>{{ room.seats }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <!-- Bảng lịch chiếu -->
-  <p-table [value]="showtimes" styleClass="p-datatable-striped table-type">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>THỜI GIAN</th>
-        <th>PHIM</th>
-        <th>TRẠNG THÁI</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-show>
-      <tr>
-        <td>{{ show.time }}</td>
-        <td>{{ show.title }}</td>
-        <td>
-          <span
-            class="px-3 py-1 border-round text-white font-semibold text-xs"
-            [ngClass]="{
-              'bg-green-500': show.status === 'ONLINE',
-              'bg-gray-500': show.status === 'OFFLINE'
-            }"
-          >
-            {{ show.status }}
-          </span>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <!-- Nút thao tác -->
-  <div class="flex justify-content-between mt-4">
-    <button
-      pButton
-      type="button"
-      label="Thêm"
-      icon="pi pi-plus"
-      class="p-button-outlined p-button-info"
-    ></button>
-    <div class="flex gap-2">
-      <button
-        pButton
-        type="button"
-        label="Thay đổi trạng thái tất cả"
-        class="p-button-warning"
-      ></button>
-      <button
-        pButton
-        type="button"
-        label="Delete all"
-        class="p-button-danger"
-      ></button>
+        dateFormat="dd-mm-yy"
+        (ngModelChange)="onDateChange()"
+        class="w-14rem"
+      ></p-calendar>
     </div>
   </div>
+
+  <!-- Danh sách phòng với background xen kẽ -->
+  <div *ngFor="let roomData of roomSchedule" class="room-schedule-container">
+    <!-- Thông tin phòng -->
+    <p-table
+      [value]="[roomData.room]"
+      class="room-table border-none"
+      [style]="{ 'min-width': '100%' }"
+    >
+      <ng-template pTemplate="header">
+        <tr class="bg-lightblue">
+          <th>Tên phòng</th>
+          <th>Loại phòng</th>
+          <th>Số ghế</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-room>
+        <tr>
+          <td class="font-semibold text-base">{{ room.name }}</td>
+          <td class="uppercase">{{ room.roomType.replace("_", "") }}</td>
+          <td>{{ room.sumSeat }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <!-- Nút thêm lịch chiếu nằm giữa room info và lịch chiếu -->
+    <div class="my-3">
+      <button
+        pButton
+        pRipple
+        icon="pi pi-plus"
+        label="Thêm lịch chiếu"
+        class="p-button-sm p-button-rounded p-button-success pt-2 pb-2 cursor-pointer"
+        title="Thêm lịch"
+        [disabled]="disable"
+        (click)="onCreateSchedule(roomData.room)"
+      ></button>
+    </div>
+
+    <!-- Lịch chiếu dưới dạng p-table -->
+    <p-table
+      [value]="roomData.schedule"
+      class="schedule-table mt-2"
+      [responsiveLayout]="'scroll'"
+      [autoLayout]="true"
+      [style]="{ 'min-width': '100%' }"
+    >
+      <ng-template pTemplate="header">
+        <tr class="schedule-header">
+          <th style="width: 15%">Giờ chiếu</th>
+          <th style="width: 65%">Tên phim</th>
+          <th style="width: 20%; text-align: center">Thao tác</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-schedule>
+        <tr>
+          <td class="text-primary schedule-time-cell">
+            {{ formatTime(schedule.startTime) }} -
+            {{ formatTime(schedule.endTime) }}
+          </td>
+          <td class="schedule-movie-cell">{{ schedule.movieName }}</td>
+          <td class="schedule-action-cell" style="text-align: center">
+            <button
+              pButton
+              pRipple
+              icon="pi pi-eye"
+              class="p-button-sm p-button-text p-button-info cursor-pointer"
+              [routerLink]="['/admin/schedule-detail', schedule.id]"
+            ></button>
+            <button
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-sm p-button-text p-button-danger cursor-pointer"
+              (click)="confirmDelete(schedule)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-paginator
+    *ngIf="roomSchedule.length != 0"
+    [rows]="pagination.rows"
+    [totalRecords]="pagination.pageCount"
+    [first]="pagination.first"
+    (onPageChange)="onPageChange($event)"
+  ></p-paginator>
 </div>
+<p-dialog
+  [header]="dialogHeader"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{
+    width: '60vw',
+    maxWidth: '800px',
+    minWidth: '320px',
+    minHeight: '280px'
+  }"
+  [contentStyle]="{ padding: '1rem' }"
+  [closable]="true"
+>
+  <form [formGroup]="createForm">
+    <div class="p-fluid">
+      <div class="grid">
+        <div class="field flex flex-column col-12 md:col-4">
+          <label for="hotline">Giờ chiếu</label>
+          <p-calendar
+            [timeOnly]="true"
+            hourFormat="24"
+            showIcon="false"
+            placeholder="Chọn giờ"
+            formControlName="time"
+          />
+
+          <small
+            *ngIf="submitted && (createForm.controls['time'].errors?.['required'] )"
+            class="p-error"
+          >
+            Giờ chiếu không được để trống
+          </small>
+        </div>
+
+        <div class="field flex flex-column col-12 md:col-8">
+          <label for="movieId">Phim </label>
+          <ng-select
+            [items]="movies"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Chọn phim "
+            formControlName="movieId"
+            [searchable]="true"
+          >
+          </ng-select>
+          <small
+            *ngIf="submitted && (createForm.controls['movieId'].errors?.['required'] )"
+            class="p-error"
+          >
+            Vui lòng chọn phim!
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-content-end mt-3 gap-2">
+      <button
+        type="button"
+        pButton
+        label="Hủy"
+        class="p-button-text"
+        (click)="visible = false; createForm.reset(); submitted = false"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        label="Thêm"
+        class="p-button-primary"
+        (click)="onCreate()"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+<p-confirmDialog
+  [style]="{ width: '35vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>

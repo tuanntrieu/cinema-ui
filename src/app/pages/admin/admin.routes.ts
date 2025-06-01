@@ -118,6 +118,24 @@ export const AdminRoute: Route[] = [
                     ),
                 title: 'Quản lí phòng chiếu  ',
             }
+            ,
+            {
+                path: 'schedule-detail/:id',
+                loadChildren: () =>
+                    import('./schedule-detail/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Chi tiết suất chiếu ',
+            }
+             ,
+            {
+                path: 'customer',
+                loadChildren: () =>
+                    import('./customer/feature.route').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Quản lý khách hàng  ',
+            }
         ],
         title: 'Trang chủ',
         canActivate: [AuthGuard],
