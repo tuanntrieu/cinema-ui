@@ -112,6 +112,67 @@ export class DashboardComponent {
       }
     }
   };
+  dataSchedule = {
+    labels: [
+      "00:00 - 02:00",
+      "02:00 - 04:00",
+      "04:00 - 06:00",
+      "06:00 - 08:00",
+      "08:00 - 10:00",
+      "10:00 - 12:00",
+      "12:00 - 14:00",
+      "14:00 - 16:00",
+      "16:00 - 18:00",
+      "18:00 - 20:00",
+      "20:00 - 22:00",
+      "22:00 - 00:00"
+    ],
+
+    datasets: [
+      {
+        label: 'Số ghế bán được ',
+        backgroundColor: this.documentStyle.getPropertyValue('--blue-500'),
+        borderColor: this.documentStyle.getPropertyValue('--blue-500'),
+        data: [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55]
+      }
+    ]
+  };
+  optionsSchedule = {
+    maintainAspectRatio: false,
+    aspectRatio: 0.8,
+    plugins: {
+      legend: {
+        labels: {
+          color: this.textColor
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: this.textColorSecondary,
+          font: {
+            weight: 500
+          }
+        },
+        grid: {
+          color: this.surfaceBorder,
+          drawBorder: false
+        }
+      },
+      y: {
+        ticks: {
+          color: this.textColorSecondary
+        },
+        grid: {
+          color: this.surfaceBorder,
+          drawBorder: false
+        }
+      }
+
+    }
+  };
+
 
   timeOptions = [
     { label: 'Hôm nay', value: 'today' },
@@ -126,6 +187,7 @@ export class DashboardComponent {
   selectedCinema: number | null = null;
   selectedType = this.typeOptions[0];
   selectedDate: Date = new Date();
+  selectedMonth: Date = new Date();
   calendarView: 'month' | 'year' | 'date' = 'year';
   calendarFormat = 'yy';
 
@@ -142,6 +204,7 @@ export class DashboardComponent {
       }
     );
     this.getRevenueChart(this.selectedType.value);
+    this.getScheduleChart();
     this.getMovieTable();
     this.getCinemaTable();
   }
@@ -180,11 +243,15 @@ export class DashboardComponent {
     else {
       const correctedDate = new Date(event.getFullYear(), event.getMonth(), event.getDate() + 1);
       this.selectedDate = correctedDate;
-
     }
-
-
     this.getRevenueChart(this.selectedType.value);
+  }
+  displayDate: Date = new Date();
+  onMonthChange(event: any) {
+    const correctedDate = new Date(event.getFullYear(), event.getMonth() + 1, event.getDate());
+    this.selectedMonth = correctedDate;
+    this.displayDate = event;
+    this.getScheduleChart();
   }
 
   getRevenueChart(type: string) {
@@ -220,7 +287,32 @@ export class DashboardComponent {
         break;
     }
   }
-
+  getScheduleChart() {
+    this.#statistics.getStatisticsSchedule(this.selectedMonth).subscribe(
+      (res) => {
+        if (res.status === success) {
+          this.generateSchdeduleChart(res.data);
+        }
+        else {
+          this.#toast.error(res.message)
+        }
+      }
+    );
+  }
+  scheduleChart: StatisticsScheduleResponse[] = [];
+  generateSchdeduleChart(scheduleChart: StatisticsScheduleResponse[]) {
+    this.dataSchedule = {
+      labels: scheduleChart.map(item => item.label),
+      datasets: [
+        {
+          label: 'Số ghế bán được ',
+          backgroundColor: this.documentStyle.getPropertyValue('--blue-500'),
+          borderColor: this.documentStyle.getPropertyValue('--blue-500'),
+          data: scheduleChart.map(item => Number(item.countSeats))
+        }
+      ]
+    };
+  }
   generateChart(dataChart: RevenueChartResponse[]) {
     this.data = {
       labels: dataChart.map(item => item.label),
@@ -388,15 +480,15 @@ export class DashboardComponent {
     this.pageCinema.rows = event.rows;
     this.getCinemaTable();
   }
-  exportCinemaRevenueToExcel(){
- const request: RevenueCinemaRequest = {
+  exportCinemaRevenueToExcel() {
+    const request: RevenueCinemaRequest = {
       pageNo: 0,
       pageSize: 0,
       sortBy: '',
       isAscending: this.sortCinema,
       date: this.selectedMonthCinema
     }
-     this.#statistics.exportCinemaExcel(request).subscribe(
+    this.#statistics.exportCinemaExcel(request).subscribe(
       (response: HttpResponse<Blob>) => {
         const contentDisposition = response.headers.get('Content-Disposition');
         const filename = contentDisposition?.substring(contentDisposition.indexOf("filename=") + 9) || 'cinema.xlsx';
@@ -458,7 +550,7 @@ export class DashboardComponent {
         }
       }
     );
-    
+
   }
   getMovieTable() {
     const request: RevenueMovieRequest = {
@@ -537,4 +629,8 @@ interface PageEvent {
   rows: number;
   page: number;
   pageCount: number;
+}
+interface StatisticsScheduleResponse {
+  label: string;
+  countSeats: number;
 }

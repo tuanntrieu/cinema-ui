@@ -184,5 +184,17 @@ export class StatisticsService {
       { responseType: 'blob' as 'json', observe: 'response' }
     );
   }
+  getStatisticsSchedule(date: Date): Observable<any> {
+    return this.#http.get(`${this.#url}/statistics-schedule`, {
+      params: new HttpParams().set("date", date.toISOString().split('T')[0])
+    }).pipe(
+      catchError((error) => {
+        if (error?.error) {
+          return mapError(error.error);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
 
 }

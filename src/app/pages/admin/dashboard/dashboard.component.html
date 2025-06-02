@@ -129,6 +129,9 @@
     </div>
   </div>
   <div class="chart-wrapper surface-card shadow-2 p-4 border-round">
+    <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+      Thống kê doanh thu
+    </h2>
     <div
       class="flex justify-content-around md:flex-row gap-3 align-items-center"
     >
@@ -166,6 +169,29 @@
     <div class="chart mt-4">
       <div class="card">
         <p-chart type="line" [data]="data" [options]="options" />
+      </div>
+    </div>
+  </div>
+  <div class="chart-wrapper surface-card shadow-2 p-4 border-round">
+    <h2 class="mb-3 text-xxl font-semibold" style="color: #2196f3 !important">
+      Suất chiếu phổ biến
+    </h2>
+    <div
+      class="flex justify-content-start md:flex-row gap-3 align-items-center"
+    >
+      <p-calendar
+        [(ngModel)]="displayDate"
+        [view]="'month'"
+        [dateFormat]="'mm-yy'"
+        (ngModelChange)="onMonthChange($event)"
+        [monthNavigator]="'month'"
+        class="w-full md:w-14rem"
+      >
+      </p-calendar>
+    </div>
+    <div class="chart mt-4">
+      <div class="card">
+        <p-chart type="bar" [data]="dataSchedule" [options]="optionsSchedule" />
       </div>
     </div>
   </div>
