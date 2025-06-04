@@ -21,14 +21,16 @@ import { TicketService } from '../../../services/ticket/ticket.service';
 import { CinemaService } from '../../../services/cinema/cinema.service';
 import { CustomerService } from '../../../services/customer/customer.service';
 import { Customer } from '../../../models/customer';
-import { DataCacheRequest } from '../../../models/ticket';
+import { CreateUrlRequest, DataCacheRequest } from '../../../models/ticket';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-place-order',
   standalone: true,
-  imports: [BreadcrumbModule, CommonModule, TableModule, PaginatorModule, InputNumberModule, FormsModule],
+  imports: [BreadcrumbModule, CommonModule, TableModule, PaginatorModule, InputNumberModule, FormsModule, RadioButtonModule],
   templateUrl: './place-order.component.html',
   styleUrls: ['./place-order.component.scss']
+
 })
 export class PlaceOrderComponent implements OnDestroy {
   readonly #toast = inject(ToastService);
@@ -299,33 +301,11 @@ export class PlaceOrderComponent implements OnDestroy {
         next: (res) => {
           if (res.status === success) {
             if (res.data.data) {
-              this.#ticket.getPaymentUrl(this.totalPrice).subscribe(
-                (resIn) => {
-                  if (resIn.status === success) {
-                    const params = new URLSearchParams(resIn.data.url.split('?')[1]);
-                    const vnpTxnRef = params.get('vnp_TxnRef');
-                    const request: DataCacheRequest = {
-                      vnp_TxnRef: vnpTxnRef ?? '',
-                      customerId: this.user.id,
-                      customerName: this.user.fullName,
-                      customerEmail: this.email,
-                      movieId: this.roomOrder.movieId,
-                      scheduleId: this.scheduleId,
-                      seatId: this.seatId,
-                      combos: this.comboRq
-                    }
-                    this.#ticket.saveDataTmp(request).subscribe(
-                      (resSave) => {
-                        if (resSave.status === success) {
-                          window.location.href = resIn.data.url.toString();
-                        }
-                      }
-                    );
-                  } else {
-                    this.#toast.error(resIn.message);
-                  }
-                }
-              );
+              if (this.selectedPaymentMethod === "VNPAY") {
+                this.paymentVnPay();
+              } else if (this.selectedPaymentMethod === "PAYOS") {
+                this.paymentPayOs();
+              }
             } else {
               this.#toast.error(res.data.message);
             }
@@ -338,6 +318,68 @@ export class PlaceOrderComponent implements OnDestroy {
         }
       })
     }
+  }
+  paymentPayOs() {
+    const request: CreateUrlRequest = {
+      amount: this.totalPrice,
+      cancelUrl: 'http://localhost:4200/payos-result',
+      returnUrl: 'http://localhost:4200/payos-result'
+    }
+    this.#ticket.getPayOSPaymentUrl(request).subscribe(
+      (resIn) => {
+        if (resIn.status === success) {
+          const vnpTxnRef = resIn.data.orderId;
+          const request: DataCacheRequest = {
+            vnp_TxnRef: vnpTxnRef ?? '',
+            customerId: this.user.id,
+            customerName: this.user.fullName,
+            customerEmail: this.email,
+            movieId: this.roomOrder.movieId,
+            scheduleId: this.scheduleId,
+            seatId: this.seatId,
+            combos: this.comboRq
+          }
+          this.#ticket.saveDataTmp(request).subscribe(
+            (resSave) => {
+              if (resSave.status === success) {
+                window.location.href = resIn.data.url.toString();
+              }
+            }
+          );
+        } else {
+          this.#toast.error(resIn.message);
+        }
+      }
+    );
+  }
+  paymentVnPay() {
+    this.#ticket.getPaymentUrl(this.totalPrice).subscribe(
+      (resIn) => {
+        if (resIn.status === success) {
+          const params = new URLSearchParams(resIn.data.url.split('?')[1]);
+          const vnpTxnRef = params.get('vnp_TxnRef');
+          const request: DataCacheRequest = {
+            vnp_TxnRef: vnpTxnRef ?? '',
+            customerId: this.user.id,
+            customerName: this.user.fullName,
+            customerEmail: this.email,
+            movieId: this.roomOrder.movieId,
+            scheduleId: this.scheduleId,
+            seatId: this.seatId,
+            combos: this.comboRq
+          }
+          this.#ticket.saveDataTmp(request).subscribe(
+            (resSave) => {
+              if (resSave.status === success) {
+                window.location.href = resIn.data.url.toString();
+              }
+            }
+          );
+        } else {
+          this.#toast.error(resIn.message);
+        }
+      }
+    );
   }
   comboRq: ComboOrderRequest[] = [];
   onQuantityChange(event: any, product: ComboResponse) {
@@ -358,6 +400,7 @@ export class PlaceOrderComponent implements OnDestroy {
       this.totalPrice += this.totalCombo
     }
   }
+  selectedPaymentMethod = 'VNPAY';
 }
 interface PageEvent {
   first: number;

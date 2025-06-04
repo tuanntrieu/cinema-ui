@@ -33,7 +33,6 @@ export class PaymentComponent implements OnInit {
             if (res.data.paymentStatus) {
               this.#ticket.existById(txnRef).subscribe(
                 (resEx) => {
-                  console.log(resEx);
                   if (resEx.status == success) {
                     if (resEx.data) {
                       this.result = res.data;
@@ -47,10 +46,8 @@ export class PaymentComponent implements OnInit {
                             if (this.orderRequest) {
                               this.#ticket.checkOut(this.orderRequest).subscribe(
                                 (resOr) => {
-                                  console.log(resOr);
                                   if (resOr.status === success) {
                                     this.result = res.data;
-                                    console.log(this.result);
                                   } else {
                                     this.#toast.error(resOr.message)
                                   }

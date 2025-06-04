@@ -125,6 +125,17 @@ export const ClientRoute: Route[] = [
             }
             ,
             {
+                path: 'payos-result',
+                loadChildren: () =>
+                    import('./payos-return/feature.routes').then(
+                        (m) => m.featureModuleRoutes
+                    ),
+                title: 'Kết quả',
+                canActivate: [AuthGuard],
+                data: { roles: ['ROLE_USER'] }
+            }
+            ,
+            {
                 path: 'order-history',
                 loadChildren: () =>
                     import('./order-history/feature.routes').then(

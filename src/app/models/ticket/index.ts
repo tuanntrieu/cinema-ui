@@ -7,7 +7,7 @@ export interface ComboTicketResponse {
     quantity: number;
 }
 export interface OrderRequest {
-    id:string;
+    id: string;
     customerId: number;
     customerName: string;
     customerEmail: string;
@@ -46,4 +46,10 @@ export interface DataCacheRequest {
     scheduleId: number;
     seatId: number[];
     combos: ComboOrderRequest[]
+}
+export interface CreateUrlRequest {
+    amount: number;
+    cancelUrl: string;
+    returnUrl: string;
+
 }

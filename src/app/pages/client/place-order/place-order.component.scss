@@ -235,7 +235,9 @@
   }
 }
 
-
+::ng-deep .p-hidden-accessible{
+  display: none;
+}
 
 ::ng-deep .combo-input {
 

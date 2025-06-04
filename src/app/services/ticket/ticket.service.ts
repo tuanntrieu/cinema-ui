@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { baseUrl } from '../../utils/constants';
-import { DataCacheRequest, OrderRequest, TicketRequest } from '../../models/ticket';
+import { CreateUrlRequest, DataCacheRequest, OrderRequest, TicketRequest } from '../../models/ticket';
 import { Observable, catchError, throwError } from 'rxjs';
 import { mapError } from '../../utils/exception';
 
@@ -94,6 +94,17 @@ export class TicketService {
         return throwError(() => error);
       })
     );
+  }
+  getPayOSPaymentUrl(rq: CreateUrlRequest): Observable<any> {
+    return this.#http.post(`${this.#url}/get-payos-paymenturl`, rq)
+      .pipe(
+        catchError((error) => {
+          if (error?.error) {
+            return mapError(error.error);
+          }
+          return throwError(() => error);
+        })
+      );
   }
 
 

@@ -258,6 +258,51 @@
               </tr>
             </tbody>
           </table>
+          <div class="mt-4 pl-4">
+            <label class="font-semibold block mb-3">
+              <i class="pi pi-credit-card mr-2"></i>Chọn hình thức thanh toán:
+            </label>
+
+            <!-- VNPAY option -->
+            <div class="flex items-center align-items-center mb-3">
+              <p-radioButton
+                name="paymentMethod"
+                value="VNPAY"
+                [(ngModel)]="selectedPaymentMethod"
+                inputId="vnpay"
+                class="mr-2"
+              ></p-radioButton>
+              <label for="vnpay" class="cursor-pointer flex items-center">
+                <img
+                  src="assets/images/logo-vnpay.png"
+                  alt="VNPAY"
+                  class="h-6 mr-2"
+                  style="width: 80px"
+                />
+                Thanh toán qua VNPAY
+              </label>
+            </div>
+
+            <!-- PAYOS option -->
+            <div class="flex items-center align-items-center">
+              <p-radioButton
+                name="paymentMethod"
+                value="PAYOS"
+                [(ngModel)]="selectedPaymentMethod"
+                inputId="payos"
+                class="mr-2"
+              ></p-radioButton>
+              <label for="payos" class="cursor-pointer flex items-center">
+                <img
+                  src="assets/images/logo-payos.svg"
+                  alt="PayOS"
+                  class="h-6 mr-2"
+                  style="width: 80px"
+                />
+                Thanh toán bằng QR Code (PayOS)
+              </label>
+            </div>
+          </div>
 
           <div class="text-center">
             <button class="btn-order" (click)="onValidate()">Tiếp tục</button>
