@@ -24,7 +24,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 @Component({
   selector: 'app-manage-room',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule,NgOptimizedImage
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, NgOptimizedImage
     , ButtonModule, NgSelectModule, FileUploadModule, FormsModule
     , MultiSelectModule, DropdownModule, InputNumberModule, ButtonModule
     , CheckboxModule, CalendarModule, InputTextareaModule, RadioButtonModule],
@@ -73,7 +73,7 @@ export class ManageRoomComponent {
             if (res.status === success) {
               this.#toast.success("Cập nhật thành công!");
               this.initData();
-              this.selectedSeatType=null;
+              this.selectedSeatType = null;
             } else {
               this.#toast.error(res.message);
             }
@@ -87,7 +87,7 @@ export class ManageRoomComponent {
             if (res.status === success) {
               this.#toast.success("Cập nhật thành công!");
               this.initData();
-              this.selectedSeatType=null;
+              this.selectedSeatType = null;
 
             } else {
               this.#toast.error(res.message);
@@ -102,7 +102,7 @@ export class ManageRoomComponent {
             if (res.status === success) {
               this.#toast.success("Cập nhật thành công!");
               this.initData();
-              this.selectedSeatType=null;
+              this.selectedSeatType = null;
             } else {
               this.#toast.error(res.message);
             }
@@ -150,6 +150,8 @@ export class ManageRoomComponent {
     )
   }
   buildSeatGrid() {
+    console.log(this.room.seats);
+
     const maxX = Math.max(...this.room.seats.map(s => s.xcoordinate));
     const maxY = Math.max(...this.room.seats.map(s => s.ycoordinate));
     this.seatGrid = Array.from({ length: maxX }, () =>

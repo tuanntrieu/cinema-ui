@@ -166,6 +166,8 @@ export class PlaceOrderComponent implements OnDestroy {
   }
 
   buildSeatGrid() {
+    
+    
     const maxX = Math.max(...this.roomOrder.seats.map(s => s.xcoordinate));
     const maxY = Math.max(...this.roomOrder.seats.map(s => s.ycoordinate));
     this.seatGrid = Array.from({ length: maxX }, () =>
