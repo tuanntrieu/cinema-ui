@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { ImageModule } from 'primeng/image';
 import { MenuItem } from 'primeng/api';
@@ -41,14 +41,17 @@ export class HeaderComponent implements OnInit {
   readonly #auth = inject(AuthService);
   readonly #toast = inject(ToastService);
   readonly #customer = inject(CustomerService);
-  readonly #router = inject(Router)
+  readonly #router = inject(Router);
+  readonly #cdr = inject(ChangeDetectorRef);
   cinemas: CinemaResponse[] = [];
   cinemasByPro: CinemaResponse[] = [];
   provinces: string[] = [];
   proSelected: string | undefined;
   user: Customer | null = null;
+  isLoggedIn = false;
 
   ngOnInit() {
+    this.isLoggedIn = this.#auth.isAuthenticated();
 
     const username = this.#customer.getCurrentUser();
     if (username) {
@@ -65,6 +68,7 @@ export class HeaderComponent implements OnInit {
     }
     this.#customer.currentUser$.subscribe(user => {
       this.user = user;
+      this.isLoggedIn = this.#auth.isAuthenticated();
       if (this.user) {
         if (this.user.cinemaPicked) {
           localStorage.setItem("selectedId", this.user.cinemaPicked.toString());
@@ -76,6 +80,7 @@ export class HeaderComponent implements OnInit {
       } else {
         this.loadSelectedCinema();
       }
+      this.#cdr.detectChanges();
     });
     this.loadCinemas();
     this.loadProvinces();
@@ -197,6 +202,7 @@ export class HeaderComponent implements OnInit {
         this.#toast.success(res.data.message)
       }
     );
+    this.#customer.setCurrentUser(null);
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     location.reload();

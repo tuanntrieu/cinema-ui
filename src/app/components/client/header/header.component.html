@@ -24,7 +24,7 @@
 
   <div
     class="col-12 md:col-2 flex justify-content-around align-items-center"
-    *ngIf="!user"
+    *ngIf="!isLoggedIn"
   >
     <p-button
       label="Đăng nhập"
@@ -43,7 +43,7 @@
       routerLink="/register"
     />
   </div>
-  <div class="col-12 md:col-2 flex align-items-center p-2" *ngIf="user">
+  <div class="col-12 md:col-2 flex align-items-center p-2" *ngIf="isLoggedIn">
     <p-tieredMenu #menu [model]="menuItems" [popup]="true"></p-tieredMenu>
     <div
       (click)="menu.toggle($event)"
@@ -51,7 +51,7 @@
     >
       <i class="pi pi-user mr-2"></i>
       <span class="font-bold name"
-        >Xin chào, <i>{{ user.fullName }}</i></span
+        >Xin chào, <i>{{ user?.fullName }}</i></span
       >
     </div>
   </div>

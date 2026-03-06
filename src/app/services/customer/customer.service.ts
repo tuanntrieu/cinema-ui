@@ -13,8 +13,17 @@ import { jwtDecode } from 'jwt-decode';
 export class CustomerService {
   #http = inject(HttpClient);
   #url = `${baseUrl}/customer`;
-  private currentUserSubject = new BehaviorSubject<Customer | null>(null);
+  private currentUserSubject = new BehaviorSubject<Customer | null>(this.loadUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
+
+  private loadUserFromStorage(): Customer | null {
+    try {
+      const stored = localStorage.getItem('current_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }
 
 
   updateCustomer(rq: CustomerRequest): Observable<any> {
@@ -66,8 +75,13 @@ export class CustomerService {
   }
 
   setCurrentUser(user: Customer | null) {
-    if (user)
+    if (user) {
+      localStorage.setItem('current_user', JSON.stringify(user));
       this.currentUserSubject.next(user);
+    } else {
+      localStorage.removeItem('current_user');
+      this.currentUserSubject.next(null);
+    }
   }
   getCurrentUser(): string | null {
     return this.extractUsername();

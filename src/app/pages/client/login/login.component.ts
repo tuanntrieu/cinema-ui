@@ -57,7 +57,7 @@ export class LoginComponent {
             this.#customer.getCustomerInfor(username).subscribe({
               next: (customerRes) => {
                 this.#customer.setCurrentUser(customerRes.data);
-                this.location.back();
+                this.#router.navigate(['/']);
               },
               error: (err) => {
                 this.#toast.error('Lấy thông tin người dùng thất bại');
