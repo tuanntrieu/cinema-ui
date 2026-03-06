@@ -1,4 +1,4 @@
-export const baseUrl = 'http://localhost:8080/api/v1';
+export const baseUrl = 'https://783e-222-252-18-10.ngrok-free.app/api/v1';
 export const success = 'SUCCESS';
 export const error = 'ERROR';
 

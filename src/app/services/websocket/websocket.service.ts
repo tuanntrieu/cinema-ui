@@ -10,7 +10,7 @@ export class WebsocketService {
 
   constructor() {
     this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws-seat'),
+      webSocketFactory: () => new SockJS('https://783e-222-252-18-10.ngrok-free.app/ws-seat'),
       reconnectDelay: 5000,
     });
     this.client.activate();
