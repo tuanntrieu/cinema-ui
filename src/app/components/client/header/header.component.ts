@@ -69,16 +69,16 @@ export class HeaderComponent implements OnInit {
     this.#customer.currentUser$.subscribe(user => {
       this.user = user;
       this.isLoggedIn = this.#auth.isAuthenticated();
-      if (this.user) {
-        if (this.user.cinemaPicked) {
-          localStorage.setItem("selectedId", this.user.cinemaPicked.toString());
-          this.selectedId = this.user.cinemaPicked;
-        } else {
-          localStorage.removeItem("selectedId");
-          this.loadSelectedCinema();
-        }
+      if (this.user?.cinemaPicked) {
+        localStorage.setItem("selectedId", this.user.cinemaPicked.toString());
+        this.selectedId = this.user.cinemaPicked;
       } else {
-        this.loadSelectedCinema();
+        const storeId = localStorage.getItem("selectedId");
+        if (storeId) {
+          this.selectedId = Number(storeId);
+        } else {
+          this.visible = true;
+        }
       }
       this.#cdr.detectChanges();
     });
@@ -148,7 +148,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  onCinemaSelectd(cinema: CinemaResponse) {
+  onCinemaSelectd(cinemaId: number) {
+    const cinema = this.cinemasByPro.find(c => c.id === cinemaId);
     if (cinema) {
       this.visible = false;
       this.selectedId = cinema.id;
