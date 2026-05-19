@@ -149,12 +149,12 @@ export class HeaderComponent implements OnInit {
 
   onCinemaSelectd(cinema: CinemaResponse) {
     if (cinema) {
+      this.visible = false;
       this.selectedId = cinema.id;
       localStorage.setItem("selectedId", this.selectedId.toString());
       localStorage.setItem("cinemaName", cinema.name);
-      window.location.href = '/'
       this.saveCineme(cinema.id);
-      this.visible = false;
+      window.location.href = '/'
     } else {
       this.selectedId = undefined;
     }
