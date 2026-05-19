@@ -137,6 +137,7 @@ export class HeaderComponent implements OnInit {
     }
   }
   onProvinceSelect(province: string) {
+    this.selectedId = undefined;
     this.#cinema.getCinemaByProvince(province).subscribe({
       next: (res) => {
         this.cinemasByPro = res.data;
